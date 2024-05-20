@@ -28,7 +28,7 @@ public class UserInterfaceFrame extends javax.swing.JFrame {
 
         //inizializzazione della toolbar
         JToolBar toolbar = new JToolBar();
-        JButton button1 = new JButton("button1");
+        JButton button1 = new JButton("Aggiungi Nodo");
         JButton button2 = new JButton("button2");
 
 

@@ -6,16 +6,22 @@ import java.util.NoSuchElementException;
 
 public abstract class AbstractDiagram implements Diagram {
 
-    private final LinkedList<Diagram> children = new LinkedList<>();
-    private int altezza;
+    protected final LinkedList<Diagram> children = new LinkedList<>();
+    protected final int altezza;
+    protected String nome;
 
-    protected AbstractDiagram(int altezza) {
+    public AbstractDiagram(int altezza, String nome) {
         this.altezza = altezza;
+        this.nome = nome;
     }
 
     public int getAltezza(){
         return altezza;
     }
+
+    public String getNome() {return this.nome;}
+    public void setNome(String nome) {this.nome = nome;}
+
 
     @Override
     public boolean add(Diagram diagram) {
