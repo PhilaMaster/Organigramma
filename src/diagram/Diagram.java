@@ -18,4 +18,7 @@ public interface Diagram extends Iterable<Diagram>{
     Diagram getChild(int i);
 
     boolean isLeaf();
+
+    String getNome();
+    int getAltezza();
 }

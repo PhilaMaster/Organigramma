@@ -2,13 +2,15 @@ package gui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 public class UserInterfaceFrame extends javax.swing.JFrame {
 
     public static final int WIDTH = 1280, HEIGHT = 720;
-
+    private int i = 0;
     public UserInterfaceFrame() {
         setUp();
         System.out.println("UserInterfaceFrame created");
@@ -58,10 +60,15 @@ public class UserInterfaceFrame extends javax.swing.JFrame {
 
         //inizializzazione panel
         UserInterfacePanel panel = new UserInterfacePanel(this);
-        this.add(panel, BorderLayout.CENTER);
+        panel.setPreferredSize(new Dimension(GraphicDiagram.WIDTH,GraphicDiagram.HEIGHT));
+
+        JScrollPane scrollPane = new CustomScrollPane(panel);
+        this.add(scrollPane, BorderLayout.CENTER);
 
         addChildButton.addActionListener(evt -> panel.addDiagram());
-        removeNodeButton.addActionListener(evt -> System.out.println("Butt2"));
+        removeNodeButton.addActionListener(evt -> {
+            System.out.println(panel.getPreferredSize());
+            });
     }
 
     private void salvataggio() {

@@ -1,20 +1,26 @@
 package gui;
 
 import diagram.CompositeDiagram;
+import diagram.Diagram;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 
 public class GraphicDiagram extends JComponent {
-    private static final int HEIGHT = 65, WIDTH = HEIGHT*3, CHARACTER_LIMIT = 30, VERTICAL_SPACE = HEIGHT*2, VERTICAL_OFFSET = 20, BORDER_WIDTH=2;
+    //costanti relative alla struttura dei diagrammi nella gui
+    static final int HEIGHT = 65, WIDTH = HEIGHT*3,
+            CHARACTER_LIMIT = 30, BORDER_WIDTH=2,
+            VERTICAL_SPACE = HEIGHT*2, VERTICAL_OFFSET = 20,
+            HORIZONTAL_SPACE = WIDTH*2, HORIZONTAL_OFFSET = 20;
+
 
     private final UserInterfacePanel uip;
-    private final CompositeDiagram diagram;
-    private int x = 0;
+    private final Diagram diagram;
+    private int x = HORIZONTAL_OFFSET;
     private boolean selected = false;
 
-    public GraphicDiagram(UserInterfacePanel uip, CompositeDiagram diagram) {
+    public GraphicDiagram(UserInterfacePanel uip, Diagram diagram) {
         this.uip = uip;
         this.diagram = diagram;
         this.setBounds(x, getY(diagram), WIDTH, HEIGHT);
@@ -23,7 +29,7 @@ public class GraphicDiagram extends JComponent {
         //this.setSize(WIDTH, HEIGHT);
     }
 
-    public CompositeDiagram getDiagram() {return diagram;}
+    public Diagram getDiagram() {return diagram;}
 
     void setSelected(boolean selected){
         this.selected = selected;
@@ -31,7 +37,7 @@ public class GraphicDiagram extends JComponent {
         repaint();
     }
 
-    private static int getY(CompositeDiagram diagram) {
+    private static int getY(Diagram diagram) {
         return diagram.getAltezza() * VERTICAL_SPACE + VERTICAL_OFFSET;
     }
 
