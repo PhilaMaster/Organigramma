@@ -7,21 +7,28 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 
 public class GraphicDiagram extends JComponent {
-    private static final int HEIGHT = 65, WIDTH = HEIGHT*3, CHARACTER_LIMIT = 20, VERTICAL_SPACE = 20, VERTICAL_OFFSET = 20, BORDER_WIDTH=2;
+    private static final int HEIGHT = 65, WIDTH = HEIGHT*3, CHARACTER_LIMIT = 30, VERTICAL_SPACE = HEIGHT*2, VERTICAL_OFFSET = 20, BORDER_WIDTH=2;
 
-    private final UserInterfaceFrame uif;
+    private final UserInterfacePanel uip;
     private final CompositeDiagram diagram;
     private int x = 0;
+    private boolean selected = false;
 
-    public GraphicDiagram(UserInterfaceFrame uif, CompositeDiagram diagram) {
-        this.uif = uif;
+    public GraphicDiagram(UserInterfacePanel uip, CompositeDiagram diagram) {
+        this.uip = uip;
         this.diagram = diagram;
         this.setBounds(x, getY(diagram), WIDTH, HEIGHT);
         //this.setLocation(x, getY(diagram));
         //this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         //this.setSize(WIDTH, HEIGHT);
-        this.setBackground(Color.PINK);
+    }
 
+    public CompositeDiagram getDiagram() {return diagram;}
+
+    void setSelected(boolean selected){
+        this.selected = selected;
+        uip.setSelected(this);
+        repaint();
     }
 
     private static int getY(CompositeDiagram diagram) {
@@ -40,7 +47,10 @@ public class GraphicDiagram extends JComponent {
         g2d.fillRect(0, 0, WIDTH, HEIGHT);
 
         //disegno rettangolo più piccolo (sarà l'interno)
-        g2d.setColor(getBackground());
+        if (!selected)
+            g2d.setColor(Color.white);
+        else
+            g2d.setColor(new Color(18, 188, 255));
         g2d.fillRect(BORDER_WIDTH, BORDER_WIDTH, WIDTH-BORDER_WIDTH*2, HEIGHT-BORDER_WIDTH*2);
 
         //ridimensiono scritta in modo che entri

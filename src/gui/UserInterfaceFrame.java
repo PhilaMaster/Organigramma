@@ -28,25 +28,40 @@ public class UserInterfaceFrame extends javax.swing.JFrame {
 
         //inizializzazione della toolbar
         JToolBar toolbar = new JToolBar();
-        JButton button1 = new JButton("Aggiungi Nodo");
-        JButton button2 = new JButton("button2");
+
+        JButton button1 = new JButton("Nuovo Organigramma");
+        JButton button2 = new JButton("Salva Organigramma");
+
+        JButton addChildButton = new JButton("Aggiungi Figlio");
+        //addChildButton.setEnabled(false);//finchè non clicco su un nodo non ne posso aggiungere
+        JButton removeNodeButton = new JButton("Rimuovi");
+        //removeNodeButton.setEnabled(false);//all'inizio non posso rimuovere nodi
 
 
-        button1.addActionListener(evt -> System.out.println("Butt1"));
-        button2.addActionListener(evt -> System.out.println("Butt2"));
 
+        JButton showRolesButton = new JButton("Mostra ruoli");
+        showRolesButton.setEnabled(false);
+        JButton showUsersButton = new JButton("Mostra utenti");
+        showUsersButton.setEnabled(false);
+
+
+
+
+
+        toolbar.add(addChildButton);
+        toolbar.add(removeNodeButton);
+        toolbar.add(Box.createHorizontalGlue());
         toolbar.add(button1);
         toolbar.add(button2);
 
         this.add(toolbar, BorderLayout.NORTH);
 
         //inizializzazione panel
-        UserInterfacePanel uip = new UserInterfacePanel(this);
-        //uip.setPreferredSize(new Dimension(WIDTH,(int) (0.9*HEIGHT)));
+        UserInterfacePanel panel = new UserInterfacePanel(this);
+        this.add(panel, BorderLayout.CENTER);
 
-        this.add(uip, BorderLayout.CENTER);
-
-
+        addChildButton.addActionListener(evt -> panel.addDiagram());
+        removeNodeButton.addActionListener(evt -> System.out.println("Butt2"));
     }
 
     private void salvataggio() {

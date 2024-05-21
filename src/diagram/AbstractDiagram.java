@@ -9,6 +9,25 @@ public abstract class AbstractDiagram implements Diagram {
     protected final LinkedList<Diagram> children = new LinkedList<>();
     protected final int altezza;
     protected String nome;
+    protected boolean removable = true;
+    private Diagram parent;
+
+    public void setRemovable(boolean removable) {
+        this.removable = removable;
+    }
+
+    public Diagram getParent() {return parent;}
+    public void setParent(Diagram parent) {this.parent = parent;}
+
+    public boolean removeThis(){
+        if (!removable) throw new UnsupportedOperationException("Impossibile rimuovere il nodo radice");
+        if (!children.isEmpty()){
+            //TODO Popup "Sei sicuro di voler eliminare nodo con dei figli?"
+            //return false
+        }
+        getParent().remove(this);
+        return true;
+    }
 
     public AbstractDiagram(int altezza, String nome) {
         this.altezza = altezza;
