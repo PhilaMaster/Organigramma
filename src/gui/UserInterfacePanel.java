@@ -1,26 +1,29 @@
 package gui;
 
-import diagram.CompositeDiagram;
-import diagram.Diagram;
+import node.CompositeNode;
+import node.Node;
+import visitor.PositionerVisitor;
+import visitor.SelectedVisitor;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.LinkedList;
-import java.util.List;
 
 public class UserInterfacePanel extends javax.swing.JPanel {
     //private final UserInterfaceFrame uif;
     private int treeHeight = 1, treeWidth = 1;
-    private final CompositeDiagram root;
-    private final GraphicDiagram graphicRoot;
-    private GraphicDiagram selected;
+    private final CompositeNode root;
+    //private final GraphicNode graphicRoot;
+    private Node selected;
     private final MouseAdapter mouseAdapter = new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
-            for (Component component : getComponents())
-                if (component instanceof GraphicDiagram diagram)
-                    diagram.setSelected(diagram == e.getSource());//setto true solo quello su cui clicco, false tutti gli altri
+            if (e.getSource() instanceof GraphicNode g) {
+                SelectedVisitor selectedVisitor = new SelectedVisitor(g);
+                root.accept(selectedVisitor);
+                selected = selectedVisitor.getSelectedNode();
+            }
+
             //TODO if doppioclick -> apri menù
         }
     };
@@ -29,46 +32,51 @@ public class UserInterfacePanel extends javax.swing.JPanel {
         super(null);//layoutManager nullo, quindi manuale
         setBackground(Color.GRAY);
 
-        //istanzio nodo radice
-        root = new CompositeDiagram(0, uif.getTitle());
+        //istanzio nodo radice (TODO se uso command, mettere in un command?
+        GraphicNode graphicRoot = new GraphicNode(this, uif.getTitle());
+        root = new CompositeNode(0, graphicRoot);
         root.setRemovable(false);
-        graphicRoot = new GraphicDiagram(this, root);
         this.add(graphicRoot);
         graphicRoot.addMouseListener(mouseAdapter);
     }
 
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
+//    public void paintComponent(Graphics g) {
+//        super.paintComponent(g);
+//
+//        //calcolo posizione nodi con visita, li disegno e disegno anche collegamenti con pattern visitor
+//        //TODO
+//    }
 
-        //calcolo posizione nodi con visita, li disegno e disegno anche collegamenti con pattern visitor
-        //TODO
-    }
-
-    public void addDiagram() {
+    public void addNode() {
         //TODO scegli nome con popup
-        String nome = "nome esempio";
+        String nomeNodo = "nome esempio";
 
-        Diagram selectedDiagram = selected.getDiagram();
-        Diagram diagram = new CompositeDiagram(selectedDiagram.getAltezza()+1, nome);
-        GraphicDiagram d = new GraphicDiagram(this, diagram);
 
-        selectedDiagram.add(diagram);
-        this.add(d);
-        d.addMouseListener(mouseAdapter);
+        GraphicNode gNode = new GraphicNode(this, nomeNodo);
+        Node node = new CompositeNode(selected.getHeight()+1, gNode);
+
+        selected.add(node);
+        this.add(gNode);
+        node.setParent(selected);
+        gNode.addMouseListener(mouseAdapter);
+
+
+        PositionerVisitor visitor = new PositionerVisitor();
+        root.accept(visitor);
+        treeHeight = visitor.getHeight();
+        treeWidth = visitor.getWidth();
 
         //verifica possibile aggiunta di scrollbar al panel (se i figli sono troppi e non entrano)
-        setPreferredSize(new Dimension(
-                GraphicDiagram.HORIZONTAL_OFFSET*5 + (GraphicDiagram.WIDTH+GraphicDiagram.HORIZONTAL_SPACE)*treeWidth,
-                GraphicDiagram.VERTICAL_OFFSET*5 + (GraphicDiagram.HEIGHT+GraphicDiagram.VERTICAL_SPACE)*treeHeight));
+        setPreferredSize(new Dimension(//TODO formula un attimo da rivedere
+                GraphicNode.HORIZONTAL_OFFSET + GraphicNode.WIDTH*2 + (GraphicNode.WIDTH+ GraphicNode.HORIZONTAL_SPACE)*treeWidth,
+                GraphicNode.VERTICAL_OFFSET + GraphicNode.HEIGHT*2 +(GraphicNode.HEIGHT+ GraphicNode.VERTICAL_SPACE)*treeHeight));
 
-        //TODO solo per debug, poi bisogna davvero calcolare l'altezza dell'albero
-        treeHeight++;
 
         this.repaint();
         this.revalidate();
     }
 
-    public void setSelected(GraphicDiagram gd) {
-        this.selected = gd;
-    }
+//    public void setSelected(GraphicNode gd) {
+//        this.selected = gd;
+//    }
 }
