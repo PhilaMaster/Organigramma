@@ -1,5 +1,12 @@
 package gui;
 
+import command.NewNodeCommand;
+import command.RemoveSelectedCommand;
+import exceptions.NothingSelectedException;
+import exceptions.RootNotRemovableException;
+import gui.command.CommandJButton;
+import gui.command.CommandJMenuItem;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
@@ -25,48 +32,68 @@ public class UserInterfaceFrame extends javax.swing.JFrame {
             }
         });
 
-        //inizializzazione della toolbar
-        JToolBar toolbar = new JToolBar();
+        UserInterfacePanel panel = panelSetup();
+        toolbarSetup(panel);
+        menuSetup(panel);
+    }
 
-        JButton button1 = new JButton("Nuovo Organigramma");
-        JButton button2 = new JButton("Salva Organigramma");
-
-        JButton addChildButton = new JButton("Aggiungi Figlio");
-        //addChildButton.setEnabled(false);//finchè non clicco su un nodo non ne posso aggiungere
-        JButton removeNodeButton = new JButton("Rimuovi");
-        //removeNodeButton.setEnabled(false);//all'inizio non posso rimuovere nodi
-
-
-
-        JButton showRolesButton = new JButton("Mostra ruoli");
-        showRolesButton.setEnabled(false);
-        JButton showUsersButton = new JButton("Mostra utenti");
-        showUsersButton.setEnabled(false);
-
-
-
-
-
-        toolbar.add(addChildButton);
-        toolbar.add(removeNodeButton);
-        toolbar.add(Box.createHorizontalGlue());
-        toolbar.add(button1);
-        toolbar.add(button2);
-
-        this.add(toolbar, BorderLayout.NORTH);
-
+    private UserInterfacePanel panelSetup() {
         //inizializzazione panel
         UserInterfacePanel panel = new UserInterfacePanel(this);
         panel.setPreferredSize(new Dimension(GraphicNode.WIDTH, GraphicNode.HEIGHT));
 
         JScrollPane scrollPane = new CustomScrollPane(panel);
         this.add(scrollPane, BorderLayout.CENTER);
-
-        addChildButton.addActionListener(evt -> panel.newNode());
-        removeNodeButton.addActionListener(evt -> {
-            System.out.println(panel.getPreferredSize());
-            });
+        return panel;
     }
+
+    private void toolbarSetup(UserInterfacePanel panel) {
+        //inizializzazione della toolbar
+        JToolBar toolbar = new JToolBar();
+
+
+        JButton addChildButton = new CommandJButton("Aggiungi Figlio", new NewNodeCommand(panel));
+        JButton removeNodeButton = new JButton("Rimuovi");
+        toolbar.add(addChildButton);
+        toolbar.add(removeNodeButton);
+        this.add(toolbar, BorderLayout.NORTH);
+        //aggiunta dei listeners ai bottoni
+        removeNodeButton.addActionListener(evt -> {
+            try {
+//                panel.removeSelectedNode();
+                new RemoveSelectedCommand(panel).execute();
+            } catch (NothingSelectedException e) {
+                JOptionPane.showMessageDialog(null, "Selezionare un nodo da rimuovere", "Errore", JOptionPane.ERROR_MESSAGE);
+            } catch (RootNotRemovableException e) {
+                JOptionPane.showMessageDialog(null, "Impossibile rimuovere il nodo radice", "Errore", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+    }
+
+    private void menuSetup(UserInterfacePanel panel) {
+        JMenuBar menuBar = new JMenuBar();
+
+
+        JMenu menu = new JMenu("File");
+        JMenuItem item1 = new CommandJMenuItem("Nuovo",null);
+        JMenuItem item2 = new CommandJMenuItem("Apri", null);
+        JMenuItem item3 = new CommandJMenuItem("Salva", null);
+        JMenuItem item4 = new CommandJMenuItem("Chiudi", null);
+        menu.add(item1);
+        menu.add(item2);
+        menu.add(item3);
+        menu.add(item4);
+        menuBar.add(menu);
+
+        menu = new JMenu("Nodo");
+        item1 = new CommandJMenuItem("Aggiungi figlio",new NewNodeCommand(panel));
+        item2 = new CommandJMenuItem("Rimuovi nodo", null);
+        menu.add(item1);
+        menu.add(item2);
+        menuBar.add(menu);
+        this.setJMenuBar(menuBar);
+    }
+
 
     private void salvataggio() {
         System.out.println("Vuoi salvare?");

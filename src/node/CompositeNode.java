@@ -7,7 +7,7 @@ import java.util.*;
 
 public class CompositeNode implements Node {
 
-    private final LinkedList<Node> children = new LinkedList<>();
+    private final List<Node> children = new ArrayList<>();
     private final int altezza;
     //private String nome;
     private boolean removable = true;
@@ -29,16 +29,6 @@ public class CompositeNode implements Node {
     public Node getParent() {return parent;}
     public void setParent(Node parent) {this.parent = parent;}
 
-    public boolean removeThis(){
-        if (!removable) throw new UnsupportedOperationException("Impossibile rimuovere il nodo radice");
-        if (!children.isEmpty()){
-            //TODO Popup "Sei sicuro di voler eliminare nodo con dei figli?"
-            //return false
-        }
-        getParent().remove(this);
-        return true;
-    }
-
     public int getHeight(){
         return altezza;
     }
@@ -47,10 +37,6 @@ public class CompositeNode implements Node {
     public List<Node> getChildren() {
         return children;
     }
-//
-//    public String getNome() {return this.nome;}
-//    public void setNome(String nome) {this.nome = nome;}
-
 
     @Override
     public boolean add(Node node) {

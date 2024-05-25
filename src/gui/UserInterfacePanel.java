@@ -1,25 +1,27 @@
 package gui;
 
 import static gui.GraphicNode.*;
+
+import exceptions.NothingSelectedException;
 import node.CompositeNode;
 import node.Node;
 import visitor.PositionerVisitor;
+import visitor.RemoveChildrenVisitor;
 import visitor.SelectedVisitor;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 public class UserInterfacePanel extends javax.swing.JPanel {
+    private static int idNode = 1;
     private int treeHeight = 1, treeWidth = 1;
     private final CompositeNode root;
     private Node selected;
-    private final MouseAdapter mouseAdapter = new MouseAdapter() {
+    public final MouseAdapter mouseAdapter = new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
             if (e.getSource() instanceof GraphicNode g) {
@@ -42,6 +44,9 @@ public class UserInterfacePanel extends javax.swing.JPanel {
         }
     };
 
+    public Node getSelected(){return selected;}
+    public void setSelected(Node selected){this.selected = selected;}
+
     public UserInterfacePanel(UserInterfaceFrame uif) {
         super(null);//layoutManager nullo, poichè li gestisco manualmente
         setBackground(Color.GRAY);
@@ -53,27 +58,26 @@ public class UserInterfacePanel extends javax.swing.JPanel {
         graphicRoot.addMouseListener(mouseAdapter);
     }
 
-    public Node getSelected(){
-        return selected;
-    }
+    /**
+     * Aggiunge un nuovo nodo al panel come figlio del nodo selezionato con un nome di default.
+     * Il nome potrà essere modificato in seguito facendo doppio click sul nodo.
+     */
+//    public void newNode() {
+//        String nomeNodo = "Nodo "+idNode++;
+//        if (selected==null) throw new NothingSelectedException();
+//
+//        GraphicNode gNode = new GraphicNode(nomeNodo);
+//        Node node = new CompositeNode(selected.getHeight()+1, gNode);
+//
+//        selected.add(node);
+//        this.add(gNode);
+//        node.setParent(selected);
+//        gNode.addMouseListener(mouseAdapter);
+//
+//        ridisegna();
+//    }
 
-    public Node getRoot(){
-        return root;
-    }
-    public void newNode() {
-        //TODO scegli nome con popup
-        String nomeNodo = "nome esempio";
-
-
-        GraphicNode gNode = new GraphicNode(nomeNodo);
-        Node node = new CompositeNode(selected.getHeight()+1, gNode);
-
-        selected.add(node);
-        this.add(gNode);
-        node.setParent(selected);
-        gNode.addMouseListener(mouseAdapter);
-
-
+    public void ridisegna() {
         PositionerVisitor visitor = new PositionerVisitor();
         root.accept(visitor);
         treeHeight = visitor.getHeight();
@@ -84,16 +88,46 @@ public class UserInterfacePanel extends javax.swing.JPanel {
                 GraphicNode.HORIZONTAL_OFFSET + GraphicNode.WIDTH*2 + (GraphicNode.WIDTH+ GraphicNode.HORIZONTAL_SPACE)*treeWidth,
                 GraphicNode.VERTICAL_OFFSET + GraphicNode.HEIGHT*2 +(GraphicNode.HEIGHT+ GraphicNode.VERTICAL_SPACE)*treeHeight));
 
-
         this.repaint();
         this.revalidate();
     }
 
+
+//    public void removeSelectedNode(){
+//        if (selected==null) throw new NothingSelectedException();
+//        if (selected.isRoot()) throw new UnsupportedOperationException("Impossibile rimuovere il nodo radice");
+//
+//        if (selected.getChildrenCount()>0){
+//            Object[] options = { "OK", "CANCEL" };
+//            int risposta = JOptionPane.showOptionDialog(null,
+//                    "Attenzione, il nodo selezionato ha dei figli, continuare con la rimozione?", "Rimozione nodo",
+//                    JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE,
+//                    null, options, options[1]);
+//            if(risposta == JOptionPane.CLOSED_OPTION || risposta == 1) return;
+//            selected.accept(new RemoveChildrenVisitor(this));
+//        }
+//
+//        this.remove(selected.getGraphic());
+//        selected.getParent().remove(selected);
+//        selected = null;
+//
+//
+//        ridisegna();
+//    }
+
+
+    /**
+     * Disegna i nodi sul frame. Il metodo in questione disegna le linee che collegano i nodi nella gerarchia.
+     * Il disegno dei nodi stessi è rimandato alla paint della superclasse poichè gli ogetti di classe
+     * GraphicNode sono figli del panel; la politica di disegno è definito nella classe GraphicNode.
+     * @param g  the <code>Graphics</code> context in which to paint
+     */
     @Override
     public void paint(Graphics g) {
         super.paint(g);
         Graphics2D g2d = (Graphics2D) g;
 
+        //TODO cambiare politica di disegnamento a runtime con qualche pattern?
         for (Node n : getNodes()) {
             int xMean = n.getGraphic().getX() + GraphicNode.WIDTH / 2;
             int y = n.getGraphic().getY();
@@ -115,9 +149,6 @@ public class UserInterfacePanel extends javax.swing.JPanel {
                     g2d.drawLine(xFirst+ GraphicNode.WIDTH/2,yLine,
                             xLast+GraphicNode.WIDTH/2,yLine);
                 }
-
-
-//                g2d.drawLine();
             }
         }
     }
@@ -135,32 +166,5 @@ public class UserInterfacePanel extends javax.swing.JPanel {
         }
     }
 
-
-//        for(Component c : this.getComponents())
-//            if (c instanceof GraphicNode gNode){
-//                int xMean = gNode.getX() + GraphicNode.WIDTH/2;
-//                int y = gNode.getY();
-//
-//                //Se non è il nodo radice, disegno la linea sopra il nodo
-//                if (!this.getRoot().getGraphic().equals(gNode))
-//                    g2d.drawLine(xMean,y,xMean,y-GraphicNode.VERTICAL_SPACE/2);
-//
-//                //Se non è un nodo foglia, disegno la linea sotto il nodo
-//                if (!leafs.contains(gNode))
-//                    g2d.drawLine(xMean,y+GraphicNode.HEIGHT,
-//                            xMean,y+GraphicNode.HEIGHT+GraphicNode.VERTICAL_SPACE/2);
-//            }
-
-//    }
-//
-//    private Set<GraphicNode> getLeafNodes() {//Si potrebbe usare un proxy per ritardare l'esecuzione del metodo a quando è davvero necessario
-//        Set<GraphicNode> leafs = new HashSet<>();
-//        getLeafNodesRec(root, leafs);
-//        return leafs;
-//    }
-//
-//    private void getLeafNodesRec(Node node, Set<GraphicNode> leafs){
-//        for(Node n: node.getChildren())
-//            if(n.isLeaf()) leafs.add(n.getGraphic());
-//    }
+    public int getIdAndUpdate() {return idNode++;    }
 }
