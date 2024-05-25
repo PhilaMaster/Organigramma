@@ -8,7 +8,6 @@ import java.awt.event.WindowEvent;
 public class UserInterfaceFrame extends javax.swing.JFrame {
 
     public static final int WIDTH = 1280, HEIGHT = 720;
-    private int i = 0;
     public UserInterfaceFrame() {
         setUp();
         System.out.println("UserInterfaceFrame created");
@@ -63,7 +62,7 @@ public class UserInterfaceFrame extends javax.swing.JFrame {
         JScrollPane scrollPane = new CustomScrollPane(panel);
         this.add(scrollPane, BorderLayout.CENTER);
 
-        addChildButton.addActionListener(evt -> panel.addNode());
+        addChildButton.addActionListener(evt -> panel.newNode());
         removeNodeButton.addActionListener(evt -> {
             System.out.println(panel.getPreferredSize());
             });
