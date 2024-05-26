@@ -1,6 +1,7 @@
-package visitor;
+package visitor.nodes_management;
 
 import node.Node;
+import visitor.NodeVisitor;
 
 import javax.swing.*;
 

@@ -20,7 +20,6 @@ public class CompositeNode implements Node {
         //this.nome = nome;
     }
 
-
     public void setRemovable(boolean removable) {
         this.removable = removable;
     }

@@ -1,8 +1,9 @@
-package visitor;
+package visitor.design;
 
 import static gui.GraphicNode.*;
 
 import node.Node;
+import visitor.NodeVisitor;
 
 public class PositionerVisitor implements NodeVisitor {
     /**

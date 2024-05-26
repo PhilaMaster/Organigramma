@@ -7,7 +7,7 @@ public class GraphicNode extends JComponent {
     //costanti relative alla struttura dei diagrammi nella gui
     public static final int
             HEIGHT = 66, WIDTH = (int) (HEIGHT*2.5),
-            CHARACTER_LIMIT = 30, BORDER_WIDTH=2,
+            CHARACTER_LIMIT = 27, BORDER_WIDTH=2,
             VERTICAL_SPACE = HEIGHT, VERTICAL_OFFSET = 20,//Spazio e offset lasciato tra un nodo e un altro in verticale
             HORIZONTAL_SPACE = WIDTH/3, HORIZONTAL_OFFSET = 20;//Spazio e offset lasciato tra un nodo e un altro in orizzontale
 
@@ -42,11 +42,13 @@ public class GraphicNode extends JComponent {
 
         //ridimensiono scritta in modo che entri all'interno del rettangolo
         Font font = g2d.getFont();
+        font = new Font(font.getFamily(), font.getStyle(), 15);
+        g2d.setFont(font);
         int fontSize = font.getSize();
         FontMetrics metrics = g2d.getFontMetrics(font);
         int textWidth = metrics.stringWidth(getName());
         int textHeight = metrics.getHeight();
-        while (textWidth > WIDTH || textHeight > HEIGHT) {
+        while (textWidth > WIDTH-BORDER_WIDTH*5 || textHeight > HEIGHT-BORDER_WIDTH*5) {
             fontSize--;
             font = new Font(font.getName(), font.getStyle(), fontSize);
             g2d.setFont(font);

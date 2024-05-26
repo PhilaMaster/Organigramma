@@ -1,7 +1,8 @@
-package visitor;
+package visitor.nodes_management;
 
 import gui.GraphicNode;
 import node.Node;
+import visitor.NodeVisitor;
 
 public class SelectedVisitor implements NodeVisitor {
     /**

@@ -4,7 +4,7 @@ import exceptions.NothingSelectedException;
 import exceptions.RootNotRemovableException;
 import gui.UserInterfacePanel;
 import node.Node;
-import visitor.RemoveChildrenVisitor;
+import visitor.nodes_management.RemoveChildrenVisitor;
 
 import javax.swing.*;
 

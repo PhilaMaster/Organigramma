@@ -1,13 +1,11 @@
 package gui;
 
-import static gui.GraphicNode.*;
-
-import exceptions.NothingSelectedException;
+import command.RenameNodeCommand;
 import node.CompositeNode;
 import node.Node;
-import visitor.PositionerVisitor;
-import visitor.RemoveChildrenVisitor;
-import visitor.SelectedVisitor;
+import visitor.design.LineDrawerVisitor;
+import visitor.design.PositionerVisitor;
+import visitor.nodes_management.SelectedVisitor;
 
 import javax.swing.*;
 import java.awt.*;
@@ -29,17 +27,17 @@ public class UserInterfacePanel extends javax.swing.JPanel {
                 root.accept(selectedVisitor);
                 selected = selectedVisitor.getSelectedNode();
 
-                if (e.getClickCount() == 2){
-                    String nome = JOptionPane.showInputDialog(null, "Inserisci il nome del nodo:", "Inserisci nome", JOptionPane.QUESTION_MESSAGE);
-                    if (nome != null && !nome.isBlank()) {
-                        if(nome.length() <= GraphicNode.CHARACTER_LIMIT){
-                            selected.getGraphic().setName(nome);
-                            selected.getGraphic().repaint();
-                        }else
-                            JOptionPane.showMessageDialog(null, "La stringa inserita è troppo lunga, il massimo è "+GraphicNode.CHARACTER_LIMIT+"!"
-                                    , "Inserisci nome", JOptionPane.ERROR_MESSAGE);
-                    }
-                }
+                if (e.getClickCount() == 2){new RenameNodeCommand(selected).execute();}
+//                    String nome = JOptionPane.showInputDialog(null, "Inserisci il nome del nodo:", "Inserisci nome", JOptionPane.QUESTION_MESSAGE);
+//                    if (nome != null && !nome.isBlank()) {
+//                        if(nome.length() <= GraphicNode.CHARACTER_LIMIT){
+//                            selected.getGraphic().setName(nome);
+//                            selected.getGraphic().repaint();
+//                        }else
+//                            JOptionPane.showMessageDialog(null, "La stringa inserita è troppo lunga, il massimo è "+GraphicNode.CHARACTER_LIMIT+"!"
+//                                    , "Inserisci nome", JOptionPane.ERROR_MESSAGE);
+//                    }
+
             }
         }
     };
@@ -115,7 +113,7 @@ public class UserInterfacePanel extends javax.swing.JPanel {
 //        ridisegna();
 //    }
 
-
+//TODO cambiare politica di disegnamento a runtime con qualche pattern?
     /**
      * Disegna i nodi sul frame. Il metodo in questione disegna le linee che collegano i nodi nella gerarchia.
      * Il disegno dei nodi stessi è rimandato alla paint della superclasse poichè gli ogetti di classe
@@ -124,47 +122,12 @@ public class UserInterfacePanel extends javax.swing.JPanel {
      */
     @Override
     public void paint(Graphics g) {
+        //Disegna i nodi
         super.paint(g);
         Graphics2D g2d = (Graphics2D) g;
-
-        //TODO cambiare politica di disegnamento a runtime con qualche pattern?
-        for (Node n : getNodes()) {
-            int xMean = n.getGraphic().getX() + GraphicNode.WIDTH / 2;
-            int y = n.getGraphic().getY();
-
-            //Se non è il nodo radice, disegno la linea sopra il nodo
-            if(!n.isRoot())
-                g2d.drawLine(xMean, y, xMean, y - GraphicNode.VERTICAL_SPACE / 2);
-
-            //Se non è un nodo foglia, disegno la linea sotto il nodo
-            if (!n.isLeaf()) {
-                g2d.drawLine(xMean, y + GraphicNode.HEIGHT,
-                        xMean, y + GraphicNode.HEIGHT + GraphicNode.VERTICAL_SPACE / 2);
-
-                int nChildren = n.getChildrenCount();
-                if (nChildren > 1){
-                    int xFirst = n.getChild(0).getGraphic().getX();
-                    int xLast = n.getChild(nChildren-1).getGraphic().getX();
-                    int yLine = n.getGraphic().getY()+VERTICAL_SPACE/2+GraphicNode.HEIGHT;
-                    g2d.drawLine(xFirst+ GraphicNode.WIDTH/2,yLine,
-                            xLast+GraphicNode.WIDTH/2,yLine);
-                }
-            }
-        }
+        root.accept(new LineDrawerVisitor(g2d));
+        //disegna i bordi
     }
 
-    private List<Node> getNodes() {
-        List<Node> nodes = new LinkedList<>();
-        getLeafNodesRec(root, nodes);
-        return nodes;
-    }
-
-    private void getLeafNodesRec(Node node, List<Node> nodes){
-        nodes.add(node);
-        for(Node n: node.getChildren()) {
-            getLeafNodesRec(n,nodes);
-        }
-    }
-
-    public int getIdAndUpdate() {return idNode++;    }
+    public int getIdAndUpdate() {return idNode++;}
 }
