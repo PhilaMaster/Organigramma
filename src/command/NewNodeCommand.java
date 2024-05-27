@@ -14,11 +14,10 @@ public class NewNodeCommand implements Command {
     }
 
     public void execute() {
-//        panel.newNode();
-        String nomeNodo = "Nodo "+panel.getIdAndUpdate();
         Node selected = panel.getSelected();
         if (selected==null) throw new NothingSelectedException();
 
+        String nomeNodo = "Nodo "+panel.getIdAndUpdate();
         GraphicNode gNode = new GraphicNode(nomeNodo);
         Node node = new CompositeNode(selected.getHeight()+1, gNode);
 
@@ -27,6 +26,7 @@ public class NewNodeCommand implements Command {
         node.setParent(selected);
         gNode.addMouseListener(panel.mouseAdapter);
 
+        panel.modificato();
         panel.ridisegna();
     }
 }

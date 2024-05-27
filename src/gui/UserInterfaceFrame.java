@@ -1,7 +1,10 @@
 package gui;
 
+import command.state.LoadStateCommand;
 import command.NewNodeCommand;
 import command.RemoveSelectedCommand;
+import command.state.NewStateCommand;
+import command.state.SaveStateCommand;
 import exceptions.NothingSelectedException;
 import exceptions.RootNotRemovableException;
 import gui.command.CommandJButton;
@@ -15,7 +18,9 @@ import java.awt.event.WindowEvent;
 public class UserInterfaceFrame extends javax.swing.JFrame {
 
     public static final int WIDTH = 1280, HEIGHT = 720;
+    private final UserInterfacePanel panel;
     public UserInterfaceFrame() {
+        panel = panelSetup();
         setUp();
         System.out.println("UserInterfaceFrame created");
     }
@@ -27,14 +32,12 @@ public class UserInterfaceFrame extends javax.swing.JFrame {
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
-                salvataggio();
-                System.exit(0);
+                salvaSeModificatoAnnulla();
             }
         });
 
-        UserInterfacePanel panel = panelSetup();
-        toolbarSetup(panel);
-        menuSetup(panel);
+        toolbarSetup();
+        menuSetup();
     }
 
     private UserInterfacePanel panelSetup() {
@@ -47,7 +50,7 @@ public class UserInterfaceFrame extends javax.swing.JFrame {
         return panel;
     }
 
-    private void toolbarSetup(UserInterfacePanel panel) {
+    private void toolbarSetup() {
         //inizializzazione della toolbar
         JToolBar toolbar = new JToolBar();
 
@@ -60,7 +63,6 @@ public class UserInterfaceFrame extends javax.swing.JFrame {
         //aggiunta dei listeners ai bottoni
         removeNodeButton.addActionListener(evt -> {
             try {
-//                panel.removeSelectedNode();
                 new RemoveSelectedCommand(panel).execute();
             } catch (NothingSelectedException e) {
                 JOptionPane.showMessageDialog(null, "Selezionare un nodo da rimuovere", "Errore", JOptionPane.ERROR_MESSAGE);
@@ -70,15 +72,26 @@ public class UserInterfaceFrame extends javax.swing.JFrame {
         });
     }
 
-    private void menuSetup(UserInterfacePanel panel) {
+    private void menuSetup() {
         JMenuBar menuBar = new JMenuBar();
 
 
         JMenu menu = new JMenu("File");
-        JMenuItem item1 = new CommandJMenuItem("Nuovo",null);
-        JMenuItem item2 = new CommandJMenuItem("Apri", null);
-        JMenuItem item3 = new CommandJMenuItem("Salva", null);
-        JMenuItem item4 = new CommandJMenuItem("Chiudi", null);
+        JMenuItem item1 = new JMenuItem("Nuovo");
+        item1.addActionListener(e -> {
+            salvaSeModificato();
+            new NewStateCommand(panel).execute();
+        });
+        JMenuItem item2 = new JMenuItem("Apri");
+        item2.addActionListener(e -> {
+            salvaSeModificato();
+            new LoadStateCommand(panel).execute();
+        });
+        JMenuItem item3 = new CommandJMenuItem("Salva", new SaveStateCommand(panel));
+        JMenuItem item4 = new JMenuItem("Chiudi");
+        item4.addActionListener(e -> {
+            salvaSeModificatoAnnulla();
+        });
         menu.add(item1);
         menu.add(item2);
         menu.add(item3);
@@ -86,17 +99,112 @@ public class UserInterfaceFrame extends javax.swing.JFrame {
         menuBar.add(menu);
 
         menu = new JMenu("Nodo");
-        item1 = new CommandJMenuItem("Aggiungi figlio",new NewNodeCommand(panel));
-        item2 = new CommandJMenuItem("Rimuovi nodo", null);
+        item1 = new JMenuItem("Aggiungi figlio");
+        item1.addActionListener(e -> {
+            try {
+                new NewNodeCommand(panel);
+            } catch (NothingSelectedException ex) {
+                JOptionPane.showMessageDialog(null, "Selezionare un nodo a cui aggiungere un figlio.", "Errore", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+        item2 = new JMenuItem("Rimuovi nodo");
+        item2.addActionListener(e -> {
+            try {
+                new RemoveSelectedCommand(panel).execute();
+            } catch (NothingSelectedException exc) {
+                JOptionPane.showMessageDialog(null, "Selezionare un nodo da rimuovere", "Errore", JOptionPane.ERROR_MESSAGE);
+            } catch (RootNotRemovableException exc) {
+                JOptionPane.showMessageDialog(null, "Impossibile rimuovere il nodo radice", "Errore", JOptionPane.ERROR_MESSAGE);
+            }
+        });
         menu.add(item1);
         menu.add(item2);
         menuBar.add(menu);
+
+
+        menu = new JMenu("Aiuto");
+        item1 = new JMenuItem("Informazioni");
+        item1.addActionListener(e -> showInfoDialog());
+        menu.add(item1);
+        menuBar.add(menu);
+
         this.setJMenuBar(menuBar);
     }
 
+    private void salvaSeModificato() {
+        if(panel.getModificato()){
+            int option = JOptionPane.showConfirmDialog(
+                    this,
+                    "Vuoi salvare lo stato corrente?",
+                    "Salva Stato",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE
+            );
 
-    private void salvataggio() {
-        System.out.println("Vuoi salvare?");
-        //TODO SALVATAGGIO
+            if(option == JOptionPane.YES_OPTION){
+                new SaveStateCommand(panel).execute();
+            }
+        }
+    }
+
+    private void showInfoDialog() {
+        JDialog infoDialog = new JDialog(this, "Informazioni di Aiuto", true);
+        infoDialog.setSize(WIDTH/3, HEIGHT/3);
+        infoDialog.setLocationRelativeTo(null);
+        infoDialog.setResizable(false);
+
+        JTabbedPane tabbedPane = new JTabbedPane();
+
+        JPanel tab1 = new JPanel();
+        tab1.add(new JLabel("<html><h3>Generale</h3>" +
+                "<p>L'applicazione permette di gestire un organigramma aziendale. " +
+                "<br>Non c'è un limite in altezza o larghezza per l'organigramma." +
+                "<br>I nodi devono avere un nome con un numero di caratteri minore di "+GraphicNode.CHARACTER_LIMIT+".</p></html>"));
+        tabbedPane.addTab("Generale", tab1);
+
+        JPanel tab2 = new JPanel();
+        tab2.add(new JLabel(
+                "<html>" +
+                    "<h3>Scorciatoie</h3>" +
+                        "<ol>"+
+                            "<li><b>Doppio click</b>, permette di aggiungere un<br> nodo figlio al nodo cliccato.</li>" +
+                            "<li><b>Tasto centrale del mouse</b>, permette di rinominare<br> il nodo selezionato.</li>" +
+                        "</ol>"+
+                    "</html>"));
+        tabbedPane.addTab("Scorciatoie", tab2);
+
+        JPanel tab3 = new JPanel();
+        tab3.add(new JLabel("<html><h3>About</h3><p>Creato da Pasquale Papalia.</p></html>"));
+        tabbedPane.addTab("About", tab3);
+
+        infoDialog.add(tabbedPane);
+        infoDialog.setVisible(true);
+    }
+
+    private void salvaSeModificatoAnnulla() {
+        if (panel.getModificato()) {
+            int option = JOptionPane.showConfirmDialog(
+                    this,
+                    "Vuoi salvare lo stato corrente prima di uscire?",
+                    "Salva Stato",
+                    JOptionPane.YES_NO_CANCEL_OPTION,
+                    JOptionPane.QUESTION_MESSAGE
+            );
+
+            if (option == JOptionPane.YES_OPTION) {
+                //salvo e chiudo
+                new SaveStateCommand(panel).execute();
+                System.out.println("Salvato");
+                System.exit(0);
+            } else if (option == JOptionPane.NO_OPTION) {
+                //chiudo senza salvare
+                System.out.println("Non salvato");
+                System.exit(0);
+            } else if (option == JOptionPane.CANCEL_OPTION) {
+                //annullo chiusura
+                System.out.println("Annullata chiusura");
+            }
+        }
+        else System.exit(0);
     }
 }

@@ -3,9 +3,13 @@ package node;
 import gui.GraphicNode;
 import visitor.NodeVisitor;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.*;
 
-public class CompositeNode implements Node {
+public class CompositeNode implements Node, Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     private final List<Node> children = new ArrayList<>();
     private final int altezza;

@@ -41,4 +41,6 @@ public interface Node extends Iterable<Node>{
     default int getChildrenCount(){
         return getChildren().size();
     }
+
+    void setRemovable(boolean removable);
 }

@@ -34,7 +34,7 @@ public class RemoveSelectedCommand implements Command {
         selected.getParent().remove(selected);
         panel.setSelected(null);
 
-
+        panel.modificato();
         panel.ridisegna();
     }
 }

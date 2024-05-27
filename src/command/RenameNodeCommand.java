@@ -1,6 +1,8 @@
 package command;
 
+import exceptions.NothingSelectedException;
 import gui.GraphicNode;
+import gui.UserInterfacePanel;
 import node.Node;
 
 import javax.swing.*;
@@ -8,6 +10,7 @@ import javax.swing.*;
 public class RenameNodeCommand implements Command{
     private final Node selected;
     public RenameNodeCommand(Node selected) {
+        if (selected == null) throw new NothingSelectedException();
         this.selected = selected;
     }
 
@@ -16,6 +19,7 @@ public class RenameNodeCommand implements Command{
         if (nome != null && !nome.isBlank()) {
             if(nome.length() <= GraphicNode.CHARACTER_LIMIT){
                 selected.getGraphic().setName(nome);
+                ((UserInterfacePanel)selected.getGraphic().getParent()).modificato();
                 selected.getGraphic().repaint();
             }else
                 JOptionPane.showMessageDialog(null, "La stringa inserita è troppo lunga, il massimo è "+GraphicNode.CHARACTER_LIMIT+"."
