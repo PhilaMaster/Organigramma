@@ -30,7 +30,7 @@ public class NewNodeCommand implements Command {
         node.setParent(selected);
         gNode.addMouseListener(panel.mouseAdapter);
 
-        panel.modificato();
+        panel.setModificato(true);
         panel.ridisegna();
     }
 }

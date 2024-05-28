@@ -1,6 +1,7 @@
 package gui.dialogs;
 
 import gui.GraphicNode;
+import gui.UserInterfacePanel;
 import node.CompositeNode;
 import node.Node;
 import node.users_management.Employee;
@@ -9,13 +10,9 @@ import node.users_management.Role;
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 import java.util.List;
 
 public class ManageEmployeeDialog extends JDialog {
@@ -48,19 +45,11 @@ public class ManageEmployeeDialog extends JDialog {
     }
 
     private void escChiusuraFinestra() {
-        // Crea un KeyStroke per il tasto ESC
+        //codice per implementare la chiusura della finestra con tasto escape
         KeyStroke escKeyStroke = KeyStroke.getKeyStroke("ESCAPE");
-
-        // Ottieni l'InputMap per la finestra in modalità focus
         InputMap inputMap = rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-
-        // Mappa il tasto ESC a una azione chiamata "closeDialog"
         inputMap.put(escKeyStroke, "closeDialog");
-
-        // Ottieni l'ActionMap per la finestra
         ActionMap actionMap = rootPane.getActionMap();
-
-        // Definisci l'azione da eseguire quando viene premuto ESC
         actionMap.put("closeDialog", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -91,40 +80,23 @@ public class ManageEmployeeDialog extends JDialog {
 }
 
 class AddEmployeeDialog extends JDialog {
-    private final Node target;
-    private final EmployeeTableModel tableModel;
-    public AddEmployeeDialog(Frame parent, Node target, EmployeeTableModel tableModel) {
+    public AddEmployeeDialog(final Frame parent, final Node target, final EmployeeTableModel tableModel) {
         super(parent, "Aggiungi Dipendente", true);
-        this.target = target;
-        this.tableModel = tableModel;
-        // Create form elements
         JTextField firstNameField = new JTextField(20);
         JTextField lastNameField = new JTextField(20);
-//        JComboBox<String> roleComboBox = new JComboBox<>(new String[]{"Manager", "Sviluppatore", "Analista", "Testatore"});
 
-        //TODO pulire sto codice, magari aggiungere un metodo a node, che restituisce tutti i ruoli ereditati
         List<Role> allRoles = new ArrayList<>();
-        Node parentNode = target.getParent();
-        while(parentNode!=null){
-            for(Role role : parentNode.getRoles())
-                if (role.isExtend()) {
-                    allRoles.add(role);
-                }
-            parentNode = parentNode.getParent();
-        }
+        allRoles.addAll(target.getInheritedRoles());
         allRoles.addAll(target.getRoles());
         JComboBox<String> roleComboBox = new JComboBox<>(allRoles
                 .stream()
                 .map(Role::getRole)
                 .toArray(String[]::new));
-//        JComboBox<String> roleComboBox = new JComboBox<>();
-//        for(Role role : target.getRoles()) {
-//            roleComboBox.addItem(role.getRole());
-//        }
+
         JButton cancelButton = new JButton("Annulla");
         JButton confirmButton = new JButton("Conferma");
 
-        // Set layout
+        //gestione layout e aggiunta componenti
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
@@ -152,7 +124,6 @@ class AddEmployeeDialog extends JDialog {
         gbc.gridx = 1;
         add(roleComboBox, gbc);
 
-        // Add buttons
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(confirmButton);
         buttonPanel.add(cancelButton);
@@ -163,25 +134,35 @@ class AddEmployeeDialog extends JDialog {
         gbc.anchor = GridBagConstraints.CENTER;
         add(buttonPanel, gbc);
 
-        // Add button listeners
+        if(allRoles.isEmpty()) JOptionPane.showMessageDialog(this,
+                "Attenzione, i ruoli per il nodo selezionato non sono stati ancora inseriti, si prega di aggiungerne qualcuno prima di aggiungere impiegati.",
+                "Warning", JOptionPane.WARNING_MESSAGE);
+
         cancelButton.addActionListener(e -> dispose());
 
         confirmButton.addActionListener(ev -> {
             String firstName = firstNameField.getText();
             String lastName = lastNameField.getText();
             String role = (String) roleComboBox.getSelectedItem();
+            if(firstName.isBlank()) {
+                JOptionPane.showMessageDialog(this, "Il campo nome non può essere vuoto", "Errore", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            else if(lastName.isBlank()) {
+                JOptionPane.showMessageDialog(this, "Il campo cognome non può essere vuoto", "Errore", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            else if(role==null) {
+                JOptionPane.showMessageDialog(this, "Il campo ruolo non può essere vuoto.", "Errore", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
-            // Logic to handle the new employee data
-            System.out.println("Nome: " + firstName);
-            System.out.println("Cognome: " + lastName);
-            System.out.println("Ruolo: " + role);
 
             Employee e = new Employee(firstName,lastName,new Role(role,false));
 
-//            tableModel.addRow(new Object[]{firstName, lastName, role,"Rimuovi"});
             tableModel.addRow(e);
             target.addEmployee(e);
-
+            ((UserInterfacePanel) target.getGraphic().getParent()).setModificato(true);
             dispose();
         });
 
@@ -197,20 +178,8 @@ class EmployeeTableModel extends AbstractTableModel {
     private final String[] columnNames = {"Nome", "Cognome", "Ruolo", "Rimuovi"};
     protected final ArrayList<Employee> data = new ArrayList<>();
 
-    //TODO solo debug per vedere se va, poi qui aggiungo i ruoli con for (per i ruoli non ereditati)
-    //e while(getParent()) per quelli ereditati
     public EmployeeTableModel(Node target) {
-        // Aggiungi alcune righe iniziali
         data.addAll(target.getEmployees());
-//        for(Employee e : target.getEmployees())
-//            data.add(new Object[]{
-//                    e.getName(),e.getSurname(),e.getRole(),"Rimuovi"
-//            });
-//
-//        data.add(new Object[]{"Pasquale", "Papalia", "Direttore", "Rimuovi"});
-//        data.add(new Object[]{"Andrea", "Nuara", "Capocessi", "Rimuovi"});
-//        data.add(new Object[]{"Giuseppe Giulio", "Misitano", "Addetto cessi", "Rimuovi"});
-//        data.add(new Object[]{"Giuseppe", "Zappia", "Laureato", "Rimuovi"});
     }
     @Override
     public int getColumnCount() {
@@ -310,13 +279,10 @@ class EmployeeButtonEditor extends DefaultCellEditor {
     @Override
     public Object getCellEditorValue() {
         if (isPushed) {
-            // Azione da eseguire quando il bottone è premuto TODO rimuovere ruolo
-            //new RemoveRoleCommand(target,nomeRuolo);
-            String nomeImpiegato = (String) tableModel.getValueAt(currentRow,0);
             Employee e = tableModel.getRowData(currentRow);
             SwingUtilities.invokeLater(() -> tableModel.removeRow(currentRow));
             target.removeEmployee(e);
-            System.out.println("Impiegato rimosso: "+e);//debug
+            ((UserInterfacePanel) target.getGraphic().getParent()).setModificato(true);
         }
         isPushed = false;
         return label;

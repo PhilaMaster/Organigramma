@@ -1,6 +1,5 @@
 package command.state;
 
-import command.Command;
 import gui.UserInterfacePanel;
 import node.Node;
 
@@ -29,11 +28,11 @@ public class LoadStateCommand extends AbstractStateCommand {
                 Node root = (Node) in.readObject();
                 panel.setRoot(root);
                 panel.setSelected(root);
+                panel.setModificato(false);
                 //JOptionPane.showMessageDialog(null, "Organigramma caricato con successo.",
                 //        "Success", JOptionPane.INFORMATION_MESSAGE);
                 panel.ridisegna();
             } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();//TODO debug
                 JOptionPane.showMessageDialog(panel, "Impossibile caricare l'organigramma.",
                         "Errore", JOptionPane.ERROR_MESSAGE);
             }

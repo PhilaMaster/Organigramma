@@ -16,7 +16,6 @@ import java.awt.event.MouseEvent;
 
 public class UserInterfacePanel extends javax.swing.JPanel {
     private static int idNode = 1;
-    private int treeHeight = 1, treeWidth = 1;
     private Node root,selected;
     private boolean modificato = false;
     public final MouseAdapter mouseAdapter = new MouseAdapter() {
@@ -78,7 +77,7 @@ public class UserInterfacePanel extends javax.swing.JPanel {
         root.accept(new ComponentAdderVisitor(this));
     }
 
-    public UserInterfacePanel(UserInterfaceFrame uif) {
+    public UserInterfacePanel() {
         super(null);//layoutManager nullo, poichè li gestisco manualmente
         setBackground(Color.GRAY);
 
@@ -98,13 +97,13 @@ public class UserInterfacePanel extends javax.swing.JPanel {
     public void ridisegna() {
         PositionerVisitor visitor = new PositionerVisitor();
         root.accept(visitor);
-        treeHeight = visitor.getHeight();
-        treeWidth = visitor.getWidth();
+        int treeHeight = visitor.getHeight();
+        int treeWidth = visitor.getWidth();
 
         //verifica possibile aggiunta di scrollbar al panel (se i figli sono troppi e non entrano)
         setPreferredSize(new Dimension(//TODO formula un attimo da rivedere
-                GraphicNode.HORIZONTAL_OFFSET + GraphicNode.WIDTH*2 + (GraphicNode.WIDTH+ GraphicNode.HORIZONTAL_SPACE)*treeWidth,
-                GraphicNode.VERTICAL_OFFSET + GraphicNode.HEIGHT*2 +(GraphicNode.HEIGHT+ GraphicNode.VERTICAL_SPACE)*treeHeight));
+                GraphicNode.HORIZONTAL_OFFSET + GraphicNode.WIDTH*2 + (GraphicNode.WIDTH+ GraphicNode.HORIZONTAL_SPACE)* treeWidth,
+                GraphicNode.VERTICAL_OFFSET + GraphicNode.HEIGHT*2 +(GraphicNode.HEIGHT+ GraphicNode.VERTICAL_SPACE)* treeHeight));
 
         this.repaint();
         this.revalidate();
@@ -134,5 +133,5 @@ public class UserInterfacePanel extends javax.swing.JPanel {
     public int getIdAndUpdate() {return idNode++;}
 
     public boolean getModificato(){return modificato;}
-    public void modificato(){modificato = true;}
+    public void setModificato(boolean mod){modificato = mod;}
 }

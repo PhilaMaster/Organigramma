@@ -1,6 +1,5 @@
 package command.state;
 
-import command.Command;
 import gui.UserInterfacePanel;
 
 import javax.swing.*;
@@ -27,8 +26,8 @@ public class SaveStateCommand extends AbstractStateCommand {
                 out.writeObject(panel.getRoot());
                 JOptionPane.showMessageDialog(panel, "Organigramma salvato con successo.",
                         "Success", JOptionPane.INFORMATION_MESSAGE);
+                panel.setModificato(false);
             } catch (IOException e) {
-                e.printStackTrace();//TODO debug
                 JOptionPane.showMessageDialog(panel, "C'è stato un errore nel salvataggio.",
                         "Errore", JOptionPane.ERROR_MESSAGE);
             }

@@ -20,7 +20,7 @@ public class RenameNodeCommand implements Command {
         if (nome != null && !nome.isBlank()) {
             if(nome.length() <= GraphicNode.CHARACTER_LIMIT){
                 selected.getGraphic().setName(nome);
-                ((UserInterfacePanel)selected.getGraphic().getParent()).modificato();
+                ((UserInterfacePanel)selected.getGraphic().getParent()).setModificato(true);
                 selected.getGraphic().repaint();
             }else
                 JOptionPane.showMessageDialog(null, "La stringa inserita è troppo lunga, il massimo è "+GraphicNode.CHARACTER_LIMIT+"."

@@ -1,5 +1,6 @@
 package gui.dialogs;
 
+import gui.UserInterfacePanel;
 import node.Node;
 import node.users_management.Role;
 
@@ -7,11 +8,8 @@ import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableModel;
 
 
 public class ManageRolesDialog extends JDialog {
@@ -61,23 +59,12 @@ public class ManageRolesDialog extends JDialog {
             }
         });
     }
-
-//    public static void main(String[] args) {
-//        SwingUtilities.invokeLater(() -> {
-//            ManageRolesDialog dialog = new ManageRolesDialog(null,null);
-//            dialog.setVisible(true);
-//        });
-//    }
 }
 
 class AddRolesDialog extends JDialog {
-    private final Node target;
-    private final ArrayListTableModel tableModel;
 
-    public AddRolesDialog(Frame parent, Node target, ArrayListTableModel tableModel) {
+    public AddRolesDialog(final Frame parent, final Node target, final ArrayListTableModel tableModel) {
         super(parent, "Gestisci ruoli", true);
-        this.target = target;
-        this.tableModel = tableModel;
         // Crea gli elementi del form
         JTextField roleNameField = new JTextField(20);
         JCheckBox inheritCheckBox = new JCheckBox();
@@ -136,7 +123,6 @@ class AddRolesDialog extends JDialog {
                 // Logica per gestire i dati del nuovo ruolo
                 System.out.println("Nome del Ruolo: " + roleName);
                 System.out.println("Eredita ai figli: " + inheritRole);
-                //TODO aggiungi ruolo al nodo (magari con un command)
                 Object[] row = new Object[4];
                 row[0] = roleName;
                 row[1] = Boolean.FALSE;
@@ -144,6 +130,10 @@ class AddRolesDialog extends JDialog {
                 row[3] = "Rimuovi";
                 tableModel.addRow(row);
                 target.addRole(new Role(roleName,inheritRole));
+                ((UserInterfacePanel) target.getGraphic().getParent()).setModificato(true);
+            }else {
+                JOptionPane.showMessageDialog(this, "Il campo \"nome\" non può essere vuoto", "Errore", JOptionPane.ERROR_MESSAGE);
+                return;
             }
             dispose();
         });
@@ -154,108 +144,25 @@ class AddRolesDialog extends JDialog {
         pack();
         setLocationRelativeTo(parent);
     }
-
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Gestione Ruoli");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(400, 300);
-
-        // Lista dei ruoli esistenti
-        DefaultListModel<String> roleListModel = new DefaultListModel<>();
-        JList<String> roleList = new JList<>(roleListModel);
-        JScrollPane roleScrollPane = new JScrollPane(roleList);
-
-        // Pulsante per aggiungere un nuovo ruolo
-        JButton addRoleButton = new JButton("Aggiungi Ruolo");
-        addRoleButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ManageEmployeeDialog dialog = new ManageEmployeeDialog(frame,null);
-                dialog.setVisible(true);
-
-                // Esempio di utilizzo dei dati ottenuti dal dialogo
-//                String roleName = dialog.getRoleName();
-//                if (roleName != null && !roleName.isEmpty()) {
-//                    boolean inheritRole = dialog.isInheritRole();
-//                    String roleInfo = roleName + (inheritRole ? " (ereditato)" : "");
-//                    roleListModel.addElement(roleInfo);
-//                }
-            }
-        });
-
-        // Layout del frame principale
-        frame.setLayout(new BorderLayout());
-        frame.add(new JLabel("Ruoli Esistenti:"), BorderLayout.NORTH);
-        frame.add(roleScrollPane, BorderLayout.CENTER);
-        frame.add(addRoleButton, BorderLayout.SOUTH);
-
-        frame.setVisible(true);
-    }
 }
 
-/*class CustomTableModel extends AbstractTableModel {
-    private final String[] columnNames = {"Ruolo", "Ereditato", "Padre", "Rimuovi"};
-    private final Object[][] data = {
-            {"Hello", Boolean.TRUE, "Bar", null},
-            {"Foo", Boolean.FALSE, null, "Rimuovi"},
-            {"Java", Boolean.FALSE, null, "Rimuovi"},
-            {"Example", Boolean.TRUE, "Swing", null}
-    };
 
-    @Override
-    public int getColumnCount() {
-        return columnNames.length;
-    }
-
-    @Override
-    public int getRowCount() {
-        return data.length;
-    }
-
-    @Override
-    public Object getValueAt(int row, int col) {
-        return data[row][col];
-    }
-
-    @Override
-    public String getColumnName(int col) {
-        return columnNames[col];
-    }
-
-    @Override
-    public Class<?> getColumnClass(int col) {
-        return getValueAt(0, col).getClass();
-    }
-
-    @Override
-    public boolean isCellEditable(int row, int col) {
-        return col == 3;  // Solo la colonna del bottone è editabile
-    }
-
-    @Override
-    public void setValueAt(Object value, int row, int col) {
-        data[row][col] = value;
-        fireTableCellUpdated(row, col);
-    }
-}
-*/
 class ArrayListTableModel extends AbstractTableModel {
     private final String[] columnNames = {"Ruolo", "Ereditato", "Padre", "Rimuovi"};
     private final ArrayList<Object[]> data = new ArrayList<>();
 
 
     public ArrayListTableModel(Node target) {
-        //TODO sistemare con oggetto ruolo invece di oggetto Object
         //Ruoli del nodo stesso
         for(Role role : target.getRoles()) {
             Object[] row = new Object[4];
             row[0] = role.getRole();
             row[1] = Boolean.FALSE;
-            row[2] = "";
+            row[2] = "";//non sono ereditati, lascio la casella vuota
             row[3] = "Rimuovi";
             data.add(row);
         }
-
+        //Ruoli ereditati
         Node parent = target.getParent();
         while(parent!=null){
             for(Role role : parent.getRoles())
@@ -312,7 +219,7 @@ class ArrayListTableModel extends AbstractTableModel {
     }
     public void removeRow(int row){
         data.remove(row);
-        fireTableRowsDeleted(row, row);//TODO row row?
+        fireTableRowsDeleted(row, row);
     }
 
     public Role getRow(int currentRow) {
@@ -371,14 +278,9 @@ class RolesButtonEditor extends DefaultCellEditor {
     @Override
     public Object getCellEditorValue() {
         if (isPushed) {
-            // Azione da eseguire quando il bottone è premuto TODO rimuovere ruolo
-//            JOptionPane.showMessageDialog(button, label + ": Button clicked!");
-
             Role role = tableModel.getRow(currentRow);
             target.removeRole(role);
-//            String nomeRuolo = (String) tableModel.getValueAt(currentRow,0);
-//            System.out.println("nome ruolo rimosso: "+nomeRuolo);
-
+            ((UserInterfacePanel) target.getGraphic().getParent()).setModificato(true);
             SwingUtilities.invokeLater(() -> tableModel.removeRow(currentRow));
         }
         isPushed = false;
