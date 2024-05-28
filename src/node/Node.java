@@ -5,6 +5,7 @@ import node.users_management.Employee;
 import node.users_management.Role;
 import visitor.NodeVisitor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface Node extends Iterable<Node>{
@@ -48,6 +49,17 @@ public interface Node extends Iterable<Node>{
 
     List<Employee> getEmployees();
     List<Role> getRoles();
+    default List<Role> getInheritedRoles(){
+        List<Role> ret = new ArrayList<Role>();
+        Node pNode = getParent();
+        while(pNode != null){
+            for(Role role : pNode.getRoles())
+                if(role.isExtend())
+                    ret.add(role);
+            pNode = pNode.getParent();
+        }
+        return ret;
+    }
 
     default void addRole(Role role){
         getRoles().add(role);
