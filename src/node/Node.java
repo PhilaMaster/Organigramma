@@ -1,6 +1,8 @@
 package node;
 
 import gui.GraphicNode;
+import node.users_management.Employee;
+import node.users_management.Role;
 import visitor.NodeVisitor;
 
 import java.util.List;
@@ -43,4 +45,23 @@ public interface Node extends Iterable<Node>{
     }
 
     void setRemovable(boolean removable);
+
+    List<Employee> getEmployees();
+    List<Role> getRoles();
+
+    default void addRole(Role role){
+        getRoles().add(role);
+    }
+
+    default void removeRole(Role role){
+        getRoles().remove(role);
+    }
+
+    default void addEmployee(Employee employee){
+        getEmployees().add(employee);
+    }
+
+    default void removeEmployee(Employee employee){
+        getEmployees().remove(employee);
+    }
 }

@@ -1,8 +1,8 @@
 package gui;
 
-import command.NewNodeCommand;
-import command.RemoveSelectedCommand;
-import command.RenameNodeCommand;
+import command.node_management.NewNodeCommand;
+import command.node_management.RemoveSelectedCommand;
+import command.node_management.RenameNodeCommand;
 import gui.command.CommandJMenuItem;
 
 import javax.swing.*;
@@ -22,19 +22,19 @@ public class NodeJPopupMenu extends JPopupMenu {
 
         addSeparator();
 
-        item = new JMenuItem("Visualizza ruoli");
+        item = new JMenuItem("Gestisci utenti");
         add(item);
-        item.addActionListener(e -> new NewNodeCommand(panel).execute());
+        item.addActionListener(e -> new NewNodeCommand(panel).execute());//TODO apri dialog utenti
 
-        item = new JMenuItem("Aggiungi figlio");
+        item = new JMenuItem("Gestisci ruoli");
         add(item);
-        item.addActionListener(e -> new NewNodeCommand(panel).execute());
-        // Aggiungi un sottomenu
-        JMenu subMenu = new JMenu("Ruoli");
-        JMenuItem subMenuItem1 = new JMenuItem("Aggiungi");
-        JMenuItem subMenuItem2 = new JMenuItem("Rimuovi");
-        subMenu.add(subMenuItem1);
-        subMenu.add(subMenuItem2);
-        this.add(subMenu);
+        item.addActionListener(e -> new NewNodeCommand(panel).execute());//TODO apri dialog ruoli
+//        // Aggiungi un sottomenu
+//        JMenu subMenu = new JMenu("Ruoli");
+//        JMenuItem subMenuItem1 = new JMenuItem("Aggiungi");
+//        JMenuItem subMenuItem2 = new JMenuItem("Rimuovi");
+//        subMenu.add(subMenuItem1);
+//        subMenu.add(subMenuItem2);
+//        this.add(subMenu);
     }
 }

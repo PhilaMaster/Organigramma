@@ -20,18 +20,18 @@ public class ManageRolesDialog extends JDialog {
         // Crea la tabella con dati personalizzati
         ArrayListTableModel tableModel = new ArrayListTableModel();
         JTable table = new JTable(tableModel);
-        table.getColumnModel().getColumn(3).setCellRenderer(new ButtonRenderer());
-        table.getColumnModel().getColumn(3).setCellEditor(new ButtonEditor(new JCheckBox(),tableModel));
+        table.getColumnModel().getColumn(3).setCellRenderer(new RolesButtonRenderer());
+        table.getColumnModel().getColumn(3).setCellEditor(new RolesButtonEditor(new JCheckBox(),tableModel));
 
         // Aggiungi la tabella in un JScrollPane
         JScrollPane scrollPane = new JScrollPane(table);
         getContentPane().add(scrollPane, BorderLayout.CENTER);
 
         // Aggiungi il bottone in fondo
-        JButton closeButton = new JButton("Aggiungi ruolo");
-        closeButton.addActionListener(e -> new AddRolesDialog(parent, target, tableModel).setVisible(true));
+        JButton addButton = new JButton("Aggiungi ruolo");
+        addButton.addActionListener(e -> new AddRolesDialog(parent, target, tableModel).setVisible(true));
         JPanel buttonPanel = new JPanel();
-        buttonPanel.add(closeButton);
+        buttonPanel.add(addButton);
         getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
         // Impostazioni del dialog
@@ -273,9 +273,9 @@ class ArrayListTableModel extends AbstractTableModel {
     }
 }
 
-class ButtonRenderer extends JButton implements TableCellRenderer {
+class RolesButtonRenderer extends JButton implements TableCellRenderer {
     private final JLabel emptyLabel = new JLabel();
-    public ButtonRenderer() {
+    public RolesButtonRenderer() {
         setOpaque(true);
     }
 
@@ -289,7 +289,7 @@ class ButtonRenderer extends JButton implements TableCellRenderer {
     }
 }
 
-class ButtonEditor extends DefaultCellEditor {
+class RolesButtonEditor extends DefaultCellEditor {
     protected JButton button;
     private String label;
     private boolean isPushed;
@@ -298,7 +298,7 @@ class ButtonEditor extends DefaultCellEditor {
     private int currentRow;
     //private final Node target;
 
-    public ButtonEditor(JCheckBox checkBox, ArrayListTableModel tableModel) {
+    public RolesButtonEditor(JCheckBox checkBox, ArrayListTableModel tableModel) {
         super(checkBox);
         this.tableModel = tableModel;
         button = new JButton();

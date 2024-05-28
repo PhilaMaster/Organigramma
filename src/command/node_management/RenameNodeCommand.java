@@ -1,5 +1,6 @@
-package command;
+package command.node_management;
 
+import command.Command;
 import exceptions.NothingSelectedException;
 import gui.GraphicNode;
 import gui.UserInterfacePanel;
@@ -7,7 +8,7 @@ import node.Node;
 
 import javax.swing.*;
 
-public class RenameNodeCommand implements Command{
+public class RenameNodeCommand implements Command {
     private final Node selected;
     public RenameNodeCommand(Node selected) {
         if (selected == null) throw new NothingSelectedException();

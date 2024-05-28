@@ -1,13 +1,12 @@
 package gui;
 
 import command.state.LoadStateCommand;
-import command.NewNodeCommand;
-import command.RemoveSelectedCommand;
+import command.node_management.NewNodeCommand;
+import command.node_management.RemoveSelectedCommand;
 import command.state.NewStateCommand;
 import command.state.SaveStateCommand;
 import exceptions.NothingSelectedException;
 import exceptions.RootNotRemovableException;
-import gui.command.CommandJButton;
 import gui.command.CommandJMenuItem;
 
 import javax.swing.*;

@@ -1,7 +1,7 @@
 package gui;
 
-import command.NewNodeCommand;
-import command.RenameNodeCommand;
+import command.node_management.NewNodeCommand;
+import command.node_management.RenameNodeCommand;
 import node.CompositeNode;
 import node.Node;
 import visitor.design.LineDrawerVisitor;

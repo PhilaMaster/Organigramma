@@ -1,5 +1,6 @@
-package command;
+package command.node_management;
 
+import command.Command;
 import exceptions.NothingSelectedException;
 import gui.GraphicNode;
 import gui.UserInterfacePanel;

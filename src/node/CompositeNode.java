@@ -1,6 +1,8 @@
 package node;
 
 import gui.GraphicNode;
+import node.users_management.Employee;
+import node.users_management.Role;
 import visitor.NodeVisitor;
 
 import java.io.Serial;
@@ -11,6 +13,8 @@ public class CompositeNode implements Node, Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    private final List<Role> roles = new ArrayList<>();
+    private final List<Employee> employees = new ArrayList<>();
     private final List<Node> children = new ArrayList<>();
     private final int altezza;
     //private String nome;
@@ -21,12 +25,24 @@ public class CompositeNode implements Node, Serializable {
     public CompositeNode(int altezza, GraphicNode graphicNode) {
         this.altezza = altezza;
         this.graphicNode = graphicNode;
-        //this.nome = nome;
     }
 
     public void setRemovable(boolean removable) {
         this.removable = removable;
     }
+
+    @Override
+    public List<Employee> getEmployees() {
+        return employees;
+    }
+
+    @Override
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+
+
     public boolean isRoot(){return !removable;}
 
     public Node getParent() {return parent;}
