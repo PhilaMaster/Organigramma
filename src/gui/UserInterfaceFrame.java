@@ -41,7 +41,7 @@ public class UserInterfaceFrame extends javax.swing.JFrame {
 
     private UserInterfacePanel panelSetup() {
         //inizializzazione panel
-        UserInterfacePanel panel = new UserInterfacePanel(this);
+        UserInterfacePanel panel = new UserInterfacePanel();
         panel.setPreferredSize(new Dimension(GraphicNode.WIDTH, GraphicNode.HEIGHT));
 
         JScrollPane scrollPane = new CustomScrollPane(panel);
