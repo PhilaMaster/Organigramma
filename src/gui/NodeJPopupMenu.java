@@ -4,8 +4,11 @@ import command.node_management.NewNodeCommand;
 import command.node_management.RemoveSelectedCommand;
 import command.node_management.RenameNodeCommand;
 import gui.command.CommandJMenuItem;
+import gui.dialogs.ManageEmployeeDialog;
+import gui.dialogs.ManageRolesDialog;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class NodeJPopupMenu extends JPopupMenu {
     private final UserInterfacePanel panel;
@@ -24,17 +27,10 @@ public class NodeJPopupMenu extends JPopupMenu {
 
         item = new JMenuItem("Gestisci utenti");
         add(item);
-        item.addActionListener(e -> new NewNodeCommand(panel).execute());//TODO apri dialog utenti
+        item.addActionListener(e -> new ManageEmployeeDialog(null,panel.getSelected()).setVisible(true));
 
         item = new JMenuItem("Gestisci ruoli");
         add(item);
-        item.addActionListener(e -> new NewNodeCommand(panel).execute());//TODO apri dialog ruoli
-//        // Aggiungi un sottomenu
-//        JMenu subMenu = new JMenu("Ruoli");
-//        JMenuItem subMenuItem1 = new JMenuItem("Aggiungi");
-//        JMenuItem subMenuItem2 = new JMenuItem("Rimuovi");
-//        subMenu.add(subMenuItem1);
-//        subMenu.add(subMenuItem2);
-//        this.add(subMenu);
+        item.addActionListener(e -> new ManageRolesDialog(null,panel.getSelected()).setVisible(true));
     }
 }

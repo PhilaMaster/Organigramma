@@ -1,6 +1,7 @@
 package gui.dialogs;
 
 import node.Node;
+import node.users_management.Role;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
@@ -16,12 +17,12 @@ import javax.swing.table.TableModel;
 public class ManageRolesDialog extends JDialog {
     public ManageRolesDialog(Frame parent, Node target) {
         super(parent, "Gestione Ruoli", true);
-
+        escChiusuraFinestra();
         // Crea la tabella con dati personalizzati
-        ArrayListTableModel tableModel = new ArrayListTableModel();
+        ArrayListTableModel tableModel = new ArrayListTableModel(target);
         JTable table = new JTable(tableModel);
         table.getColumnModel().getColumn(3).setCellRenderer(new RolesButtonRenderer());
-        table.getColumnModel().getColumn(3).setCellEditor(new RolesButtonEditor(new JCheckBox(),tableModel));
+        table.getColumnModel().getColumn(3).setCellEditor(new RolesButtonEditor(new JCheckBox(),tableModel,target));
 
         // Aggiungi la tabella in un JScrollPane
         JScrollPane scrollPane = new JScrollPane(table);
@@ -39,12 +40,34 @@ public class ManageRolesDialog extends JDialog {
         setLocationRelativeTo(parent);
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            ManageRolesDialog dialog = new ManageRolesDialog(null,null);
-            dialog.setVisible(true);
+    private void escChiusuraFinestra() {
+        // Crea un KeyStroke per il tasto ESC
+        KeyStroke escKeyStroke = KeyStroke.getKeyStroke("ESCAPE");
+
+        // Ottieni l'InputMap per la finestra in modalità focus
+        InputMap inputMap = rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+
+        // Mappa il tasto ESC a una azione chiamata "closeDialog"
+        inputMap.put(escKeyStroke, "closeDialog");
+
+        // Ottieni l'ActionMap per la finestra
+        ActionMap actionMap = rootPane.getActionMap();
+
+        // Definisci l'azione da eseguire quando viene premuto ESC
+        actionMap.put("closeDialog", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ManageRolesDialog.this.dispose();
+            }
         });
     }
+
+//    public static void main(String[] args) {
+//        SwingUtilities.invokeLater(() -> {
+//            ManageRolesDialog dialog = new ManageRolesDialog(null,null);
+//            dialog.setVisible(true);
+//        });
+//    }
 }
 
 class AddRolesDialog extends JDialog {
@@ -117,9 +140,10 @@ class AddRolesDialog extends JDialog {
                 Object[] row = new Object[4];
                 row[0] = roleName;
                 row[1] = Boolean.FALSE;
-                row[2] = null;
+                row[2] = "";
                 row[3] = "Rimuovi";
                 tableModel.addRow(row);
+                target.addRole(new Role(roleName,inheritRole));
             }
             dispose();
         });
@@ -131,45 +155,45 @@ class AddRolesDialog extends JDialog {
         setLocationRelativeTo(parent);
     }
 
-//    public static void main(String[] args) {
-//        JFrame frame = new JFrame("Gestione Ruoli");
-//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        frame.setSize(400, 300);
-//
-//        // Lista dei ruoli esistenti
-//        DefaultListModel<String> roleListModel = new DefaultListModel<>();
-//        JList<String> roleList = new JList<>(roleListModel);
-//        JScrollPane roleScrollPane = new JScrollPane(roleList);
-//
-//        // Pulsante per aggiungere un nuovo ruolo
-//        JButton addRoleButton = new JButton("Aggiungi Ruolo");
-//        addRoleButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                ManageEmployeeDialog dialog = new ManageEmployeeDialog(frame);
-//                dialog.setVisible(true);
-//
-//                // Esempio di utilizzo dei dati ottenuti dal dialogo
-////                String roleName = dialog.getRoleName();
-////                if (roleName != null && !roleName.isEmpty()) {
-////                    boolean inheritRole = dialog.isInheritRole();
-////                    String roleInfo = roleName + (inheritRole ? " (ereditato)" : "");
-////                    roleListModel.addElement(roleInfo);
-////                }
-//            }
-//        });
-//
-//        // Layout del frame principale
-//        frame.setLayout(new BorderLayout());
-//        frame.add(new JLabel("Ruoli Esistenti:"), BorderLayout.NORTH);
-//        frame.add(roleScrollPane, BorderLayout.CENTER);
-//        frame.add(addRoleButton, BorderLayout.SOUTH);
-//
-//        frame.setVisible(true);
-//    }
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("Gestione Ruoli");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(400, 300);
+
+        // Lista dei ruoli esistenti
+        DefaultListModel<String> roleListModel = new DefaultListModel<>();
+        JList<String> roleList = new JList<>(roleListModel);
+        JScrollPane roleScrollPane = new JScrollPane(roleList);
+
+        // Pulsante per aggiungere un nuovo ruolo
+        JButton addRoleButton = new JButton("Aggiungi Ruolo");
+        addRoleButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ManageEmployeeDialog dialog = new ManageEmployeeDialog(frame,null);
+                dialog.setVisible(true);
+
+                // Esempio di utilizzo dei dati ottenuti dal dialogo
+//                String roleName = dialog.getRoleName();
+//                if (roleName != null && !roleName.isEmpty()) {
+//                    boolean inheritRole = dialog.isInheritRole();
+//                    String roleInfo = roleName + (inheritRole ? " (ereditato)" : "");
+//                    roleListModel.addElement(roleInfo);
+//                }
+            }
+        });
+
+        // Layout del frame principale
+        frame.setLayout(new BorderLayout());
+        frame.add(new JLabel("Ruoli Esistenti:"), BorderLayout.NORTH);
+        frame.add(roleScrollPane, BorderLayout.CENTER);
+        frame.add(addRoleButton, BorderLayout.SOUTH);
+
+        frame.setVisible(true);
+    }
 }
 
-class CustomTableModel extends AbstractTableModel {
+/*class CustomTableModel extends AbstractTableModel {
     private final String[] columnNames = {"Ruolo", "Ereditato", "Padre", "Rimuovi"};
     private final Object[][] data = {
             {"Hello", Boolean.TRUE, "Bar", null},
@@ -214,19 +238,38 @@ class CustomTableModel extends AbstractTableModel {
         fireTableCellUpdated(row, col);
     }
 }
-
+*/
 class ArrayListTableModel extends AbstractTableModel {
     private final String[] columnNames = {"Ruolo", "Ereditato", "Padre", "Rimuovi"};
     private final ArrayList<Object[]> data = new ArrayList<>();
 
-    //TODO solo debug per vedere se va, poi qui aggiungo i ruoli con for (per i ruoli non ereditati)
-    //e while(getParent()) per quelli ereditati
-    public ArrayListTableModel() {
-        // Aggiungi alcune righe iniziali
-        data.add(new Object[]{"Hello", Boolean.TRUE, "Bar", null});
-        data.add(new Object[]{"Foo", Boolean.FALSE, null, "Rimuovi"});
-        data.add(new Object[]{"Java", Boolean.FALSE, null, "Rimuovi"});
-        data.add(new Object[]{"Example", Boolean.TRUE, "Swing", null});
+
+    public ArrayListTableModel(Node target) {
+        //TODO sistemare con oggetto ruolo invece di oggetto Object
+        //Ruoli del nodo stesso
+        for(Role role : target.getRoles()) {
+            Object[] row = new Object[4];
+            row[0] = role.getRole();
+            row[1] = Boolean.FALSE;
+            row[2] = "";
+            row[3] = "Rimuovi";
+            data.add(row);
+        }
+
+        Node parent = target.getParent();
+        while(parent!=null){
+            for(Role role : parent.getRoles())
+                if (role.isExtend()) {
+                    Object[] row = new Object[4];
+                    row[0] = role.getRole();
+                    row[1] = Boolean.TRUE;
+                    row[2] = parent.getGraphic().getName();
+                    row[3] = null;
+                    data.add(row);
+                }
+            parent = parent.getParent();
+        }
+        //si potrebbero inglobare in un unico do-while volendo
     }
     @Override
     public int getColumnCount() {
@@ -271,6 +314,10 @@ class ArrayListTableModel extends AbstractTableModel {
         data.remove(row);
         fireTableRowsDeleted(row, row);//TODO row row?
     }
+
+    public Role getRow(int currentRow) {
+        return new Role((String) getValueAt(currentRow,0),(boolean) getValueAt(currentRow,1));
+    }
 }
 
 class RolesButtonRenderer extends JButton implements TableCellRenderer {
@@ -296,11 +343,12 @@ class RolesButtonEditor extends DefaultCellEditor {
     private final JLabel emptyLabel = new JLabel();
     private final ArrayListTableModel tableModel;
     private int currentRow;
-    //private final Node target;
+    private final Node target;
 
-    public RolesButtonEditor(JCheckBox checkBox, ArrayListTableModel tableModel) {
+    public RolesButtonEditor(JCheckBox checkBox, ArrayListTableModel tableModel, Node target) {
         super(checkBox);
         this.tableModel = tableModel;
+        this.target = target;
         button = new JButton();
         button.setOpaque(true);
         button.addActionListener(e -> fireEditingStopped());
@@ -325,9 +373,13 @@ class RolesButtonEditor extends DefaultCellEditor {
         if (isPushed) {
             // Azione da eseguire quando il bottone è premuto TODO rimuovere ruolo
 //            JOptionPane.showMessageDialog(button, label + ": Button clicked!");
+
+            Role role = tableModel.getRow(currentRow);
+            target.removeRole(role);
+//            String nomeRuolo = (String) tableModel.getValueAt(currentRow,0);
+//            System.out.println("nome ruolo rimosso: "+nomeRuolo);
+
             SwingUtilities.invokeLater(() -> tableModel.removeRow(currentRow));
-            String nomeRuolo = (String) tableModel.getValueAt(currentRow,0);
-            System.out.println("nome ruolo rimosso: "+nomeRuolo);
         }
         isPushed = false;
         return label;
