@@ -41,7 +41,7 @@ public class UserInterfacePanel extends javax.swing.JPanel {
          * in <code>mousePressed</code>. Mostra il menù contestuale sul nodo su cui si clicca tasto destro (per Windows)
          */
         private void menuPop(MouseEvent e) {
-            new CustomJPopupMenu(UserInterfacePanel.this).show(e.getComponent(), e.getX(), e.getY());
+            new NodeJPopupMenu(UserInterfacePanel.this).show(e.getComponent(), e.getX(), e.getY());
         }
 
         @Override
@@ -94,24 +94,6 @@ public class UserInterfacePanel extends javax.swing.JPanel {
         graphicRoot.addMouseListener(mouseAdapter);
     }
 
-    /**
-     * Aggiunge un nuovo nodo al panel come figlio del nodo selezionato con un nome di default.
-     * Il nome potrà essere modificato in seguito facendo doppio click sul nodo.
-     */
-//    public void newNode() {
-//        String nomeNodo = "Nodo "+idNode++;
-//        if (selected==null) throw new NothingSelectedException();
-//
-//        GraphicNode gNode = new GraphicNode(nomeNodo);
-//        Node node = new CompositeNode(selected.getHeight()+1, gNode);
-//
-//        selected.add(node);
-//        this.add(gNode);
-//        node.setParent(selected);
-//        gNode.addMouseListener(mouseAdapter);
-//
-//        ridisegna();
-//    }
 
     public void ridisegna() {
         PositionerVisitor visitor = new PositionerVisitor();
@@ -127,29 +109,6 @@ public class UserInterfacePanel extends javax.swing.JPanel {
         this.repaint();
         this.revalidate();
     }
-
-
-//    public void removeSelectedNode(){
-//        if (selected==null) throw new NothingSelectedException();
-//        if (selected.isRoot()) throw new UnsupportedOperationException("Impossibile rimuovere il nodo radice");
-//
-//        if (selected.getChildrenCount()>0){
-//            Object[] options = { "OK", "CANCEL" };
-//            int risposta = JOptionPane.showOptionDialog(null,
-//                    "Attenzione, il nodo selezionato ha dei figli, continuare con la rimozione?", "Rimozione nodo",
-//                    JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE,
-//                    null, options, options[1]);
-//            if(risposta == JOptionPane.CLOSED_OPTION || risposta == 1) return;
-//            selected.accept(new RemoveChildrenVisitor(this));
-//        }
-//
-//        this.remove(selected.getGraphic());
-//        selected.getParent().remove(selected);
-//        selected = null;
-//
-//
-//        ridisegna();
-//    }
 
 //TODO cambiare politica di disegnamento a runtime con qualche pattern?
     /**

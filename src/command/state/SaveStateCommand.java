@@ -25,11 +25,11 @@ public class SaveStateCommand extends AbstractStateCommand {
             try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file))) {
                 // Salva lo stato dell'applicazione
                 out.writeObject(panel.getRoot());
-                JOptionPane.showMessageDialog(null, "Organigramma salvato con successo.",
+                JOptionPane.showMessageDialog(panel, "Organigramma salvato con successo.",
                         "Success", JOptionPane.INFORMATION_MESSAGE);
             } catch (IOException e) {
                 e.printStackTrace();//TODO debug
-                JOptionPane.showMessageDialog(null, "C'è stato un errore nel salvataggio.",
+                JOptionPane.showMessageDialog(panel, "C'è stato un errore nel salvataggio.",
                         "Errore", JOptionPane.ERROR_MESSAGE);
             }
         }

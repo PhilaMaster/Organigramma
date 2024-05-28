@@ -12,7 +12,10 @@ public class NewNodeCommand implements Command {
     public NewNodeCommand(UserInterfacePanel panel) {
         this.panel = panel;
     }
-
+    /**
+     * Aggiunge un nuovo nodo al panel come figlio del nodo selezionato con un nome di default.
+     * Il nome potrà essere modificato in seguito.
+     */
     public void execute() {
         Node selected = panel.getSelected();
         if (selected==null) throw new NothingSelectedException();

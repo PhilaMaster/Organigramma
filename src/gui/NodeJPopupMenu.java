@@ -3,30 +3,22 @@ package gui;
 import command.NewNodeCommand;
 import command.RemoveSelectedCommand;
 import command.RenameNodeCommand;
-import node.Node;
+import gui.command.CommandJMenuItem;
 
 import javax.swing.*;
 
-public class CustomJPopupMenu extends JPopupMenu {
+public class NodeJPopupMenu extends JPopupMenu {
     private final UserInterfacePanel panel;
-    public CustomJPopupMenu(UserInterfacePanel panel) {
+    public NodeJPopupMenu(UserInterfacePanel panel) {
         this.panel=panel;
         itemsSetUp();
     }
 
     private void itemsSetUp() {
         JMenuItem item;
-        item = new JMenuItem("Aggiungi figlio");
-        add(item);
-        item.addActionListener(e -> new NewNodeCommand(panel).execute());
-
-        item = new JMenuItem("Rimuovi nodo");
-        add(item);
-        item.addActionListener(e -> new RemoveSelectedCommand(panel).execute());
-
-        item = new JMenuItem("Rinomina nodo");
-        add(item);
-        item.addActionListener(e -> new RenameNodeCommand(panel.getSelected()).execute());
+        add(new CommandJMenuItem("Aggiungi figlio",new NewNodeCommand(panel)));
+        add(new CommandJMenuItem("Rimuovi nodo",new RemoveSelectedCommand(panel)));
+        add(new CommandJMenuItem("Rinomina nodo",new RenameNodeCommand(panel.getSelected())));
 
         addSeparator();
 

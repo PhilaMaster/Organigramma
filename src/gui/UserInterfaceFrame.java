@@ -55,21 +55,30 @@ public class UserInterfaceFrame extends javax.swing.JFrame {
         JToolBar toolbar = new JToolBar();
 
 
-        JButton addChildButton = new CommandJButton("Aggiungi Figlio", new NewNodeCommand(panel));
+        JButton addChildButton = new JButton("Aggiungi Figlio");
+        addChildButton.addActionListener(evt -> {
+            try {
+                new NewNodeCommand(panel).execute();
+            } catch (NothingSelectedException e) {
+                JOptionPane.showMessageDialog(this, "Selezionare un nodo a cui aggiungere un figlio.", "Errore", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
         JButton removeNodeButton = new JButton("Rimuovi");
-        toolbar.add(addChildButton);
-        toolbar.add(removeNodeButton);
-        this.add(toolbar, BorderLayout.NORTH);
-        //aggiunta dei listeners ai bottoni
         removeNodeButton.addActionListener(evt -> {
             try {
                 new RemoveSelectedCommand(panel).execute();
             } catch (NothingSelectedException e) {
-                JOptionPane.showMessageDialog(null, "Selezionare un nodo da rimuovere", "Errore", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Selezionare un nodo da rimuovere", "Errore", JOptionPane.ERROR_MESSAGE);
             } catch (RootNotRemovableException e) {
-                JOptionPane.showMessageDialog(null, "Impossibile rimuovere il nodo radice", "Errore", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Impossibile rimuovere il nodo radice", "Errore", JOptionPane.ERROR_MESSAGE);
             }
         });
+
+        toolbar.add(new JLabel("Quickbar"));
+        toolbar.add(addChildButton);
+        toolbar.add(removeNodeButton);
+        this.add(toolbar, BorderLayout.SOUTH);
     }
 
     private void menuSetup() {
@@ -102,9 +111,9 @@ public class UserInterfaceFrame extends javax.swing.JFrame {
         item1 = new JMenuItem("Aggiungi figlio");
         item1.addActionListener(e -> {
             try {
-                new NewNodeCommand(panel);
+                new NewNodeCommand(panel).execute();
             } catch (NothingSelectedException ex) {
-                JOptionPane.showMessageDialog(null, "Selezionare un nodo a cui aggiungere un figlio.", "Errore", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Selezionare un nodo a cui aggiungere un figlio.", "Errore", JOptionPane.ERROR_MESSAGE);
             }
         });
         item2 = new JMenuItem("Rimuovi nodo");
@@ -112,9 +121,9 @@ public class UserInterfaceFrame extends javax.swing.JFrame {
             try {
                 new RemoveSelectedCommand(panel).execute();
             } catch (NothingSelectedException exc) {
-                JOptionPane.showMessageDialog(null, "Selezionare un nodo da rimuovere", "Errore", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Selezionare un nodo da rimuovere", "Errore", JOptionPane.ERROR_MESSAGE);
             } catch (RootNotRemovableException exc) {
-                JOptionPane.showMessageDialog(null, "Impossibile rimuovere il nodo radice", "Errore", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Impossibile rimuovere il nodo radice", "Errore", JOptionPane.ERROR_MESSAGE);
             }
         });
         menu.add(item1);

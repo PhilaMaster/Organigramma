@@ -34,7 +34,7 @@ public class LoadStateCommand extends AbstractStateCommand {
                 panel.ridisegna();
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();//TODO debug
-                JOptionPane.showMessageDialog(null, "Impossibile caricare l'organigramma.",
+                JOptionPane.showMessageDialog(panel, "Impossibile caricare l'organigramma.",
                         "Errore", JOptionPane.ERROR_MESSAGE);
             }
         }
