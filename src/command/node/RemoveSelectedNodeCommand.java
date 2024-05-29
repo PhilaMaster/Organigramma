@@ -1,4 +1,4 @@
-package command.node_management;
+package command.node;
 
 import command.Command;
 import exceptions.NothingSelectedException;
@@ -9,10 +9,10 @@ import visitor.nodes_management.RemoveChildrenVisitor;
 
 import javax.swing.*;
 
-public class RemoveSelectedCommand implements Command {
+public class RemoveSelectedNodeCommand implements Command {
     private final UserInterfacePanel panel;
 
-    public RemoveSelectedCommand(UserInterfacePanel panel) {
+    public RemoveSelectedNodeCommand(UserInterfacePanel panel) {
         this.panel = panel;
     }
 

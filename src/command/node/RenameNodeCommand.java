@@ -1,4 +1,4 @@
-package command.node_management;
+package command.node;
 
 import command.Command;
 import exceptions.NothingSelectedException;

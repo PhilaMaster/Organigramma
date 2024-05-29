@@ -4,8 +4,8 @@ import gui.GraphicNode;
 import gui.UserInterfacePanel;
 import node.CompositeNode;
 import node.Node;
-import node.users_management.Employee;
-import node.users_management.Role;
+import node.Employee;
+import node.Role;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;

@@ -1,4 +1,4 @@
-package node.users_management;
+package node;
 
 import java.io.Serial;
 import java.io.Serializable;

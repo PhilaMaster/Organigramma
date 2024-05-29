@@ -2,7 +2,7 @@ package gui.dialogs;
 
 import gui.UserInterfacePanel;
 import node.Node;
-import node.users_management.Role;
+import node.Role;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;

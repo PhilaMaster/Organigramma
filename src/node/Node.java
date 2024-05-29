@@ -1,8 +1,6 @@
 package node;
 
 import gui.GraphicNode;
-import node.users_management.Employee;
-import node.users_management.Role;
 import visitor.NodeVisitor;
 
 import java.util.ArrayList;
@@ -63,7 +61,7 @@ public interface Node extends Iterable<Node>{
     List<Employee> getEmployees();
     List<Role> getRoles();
     default List<Role> getInheritedRoles(){
-        List<Role> ret = new ArrayList<Role>();
+        List<Role> ret = new ArrayList<>();
         Node pNode = getParent();
         while(pNode != null){
             for(Role role : pNode.getRoles())

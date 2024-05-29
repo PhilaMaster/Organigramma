@@ -1,8 +1,6 @@
 package node;
 
 import gui.GraphicNode;
-import node.users_management.Employee;
-import node.users_management.Role;
 import visitor.NodeVisitor;
 
 import java.io.Serial;
