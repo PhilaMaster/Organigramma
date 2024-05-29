@@ -1,13 +1,15 @@
 package gui;
 
 import command.state.LoadStateCommand;
-import command.node_management.NewNodeCommand;
-import command.node_management.RemoveSelectedCommand;
+import command.node.NewNodeCommand;
+import command.node.RemoveSelectedNodeCommand;
 import command.state.NewStateCommand;
 import command.state.SaveStateCommand;
 import exceptions.NothingSelectedException;
 import exceptions.RootNotRemovableException;
 import gui.command.CommandJMenuItem;
+import visitor.design.LineDrawerVisitorFactory;
+import visitor.design.NaiveDrawerVisitorFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -66,7 +68,7 @@ public class UserInterfaceFrame extends javax.swing.JFrame {
         JButton removeNodeButton = new JButton("Rimuovi");
         removeNodeButton.addActionListener(evt -> {
             try {
-                new RemoveSelectedCommand(panel).execute();
+                new RemoveSelectedNodeCommand(panel).execute();
             } catch (NothingSelectedException e) {
                 JOptionPane.showMessageDialog(this, "Selezionare un nodo da rimuovere", "Errore", JOptionPane.ERROR_MESSAGE);
             } catch (RootNotRemovableException e) {
@@ -74,15 +76,33 @@ public class UserInterfaceFrame extends javax.swing.JFrame {
             }
         });
 
+        ButtonGroup group = new ButtonGroup();
+        JRadioButton lineDrawer = new JRadioButton("Organigramma classico");
+        lineDrawer.setSelected(true);
+        lineDrawer.addActionListener(e -> {
+            panel.setFactory(LineDrawerVisitorFactory.INSTANCE);
+            panel.ridisegna();
+                });
+        group.add(lineDrawer);
+        JRadioButton naiveDrawer = new JRadioButton("Dritte");
+        naiveDrawer.addActionListener(e -> {
+            panel.setFactory(NaiveDrawerVisitorFactory.INSTANCE);
+            panel.ridisegna();
+                });
+        group.add(naiveDrawer);
+
         toolbar.add(new JLabel("Quickbar"));
         toolbar.add(addChildButton);
         toolbar.add(removeNodeButton);
+        toolbar.add(Box.createHorizontalGlue());
+        toolbar.add(new JLabel("Seleziona stile linee:"));
+        toolbar.add(lineDrawer);
+        toolbar.add(naiveDrawer);
         this.add(toolbar, BorderLayout.SOUTH);
     }
 
     private void menuSetup() {
         JMenuBar menuBar = new JMenuBar();
-
 
         JMenu menu = new JMenu("File");
         JMenuItem item1 = new JMenuItem("Nuovo");
@@ -116,7 +136,7 @@ public class UserInterfaceFrame extends javax.swing.JFrame {
         item2 = new JMenuItem("Rimuovi nodo");
         item2.addActionListener(e -> {
             try {
-                new RemoveSelectedCommand(panel).execute();
+                new RemoveSelectedNodeCommand(panel).execute();
             } catch (NothingSelectedException exc) {
                 JOptionPane.showMessageDialog(this, "Selezionare un nodo da rimuovere", "Errore", JOptionPane.ERROR_MESSAGE);
             } catch (RootNotRemovableException exc) {

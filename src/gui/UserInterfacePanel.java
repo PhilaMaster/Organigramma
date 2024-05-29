@@ -1,11 +1,10 @@
 package gui;
 
-import command.node_management.NewNodeCommand;
-import command.node_management.RenameNodeCommand;
+import command.node.NewNodeCommand;
+import command.node.RenameNodeCommand;
 import node.CompositeNode;
 import node.Node;
-import visitor.design.LineDrawerVisitor;
-import visitor.design.PositionerVisitor;
+import visitor.design.*;
 import visitor.nodes_management.ComponentAdderVisitor;
 import visitor.nodes_management.SelectedVisitor;
 
@@ -16,6 +15,8 @@ import java.awt.event.MouseEvent;
 
 public class UserInterfacePanel extends javax.swing.JPanel {
     private static int idNode = 1;
+
+    private DrawerVisitorFactory factory = LineDrawerVisitorFactory.INSTANCE;//factory di default
     private Node root,selected;
     private boolean modificato = false;
     public final MouseAdapter mouseAdapter = new MouseAdapter() {
@@ -60,9 +61,10 @@ public class UserInterfacePanel extends javax.swing.JPanel {
         }
     };
 
+    public void setFactory(DrawerVisitorFactory factory) {this.factory = factory;}
+
     public Node getSelected(){return selected;}
     public void setSelected(Node selected){
-        //TODO Lanciare eccezione qui?
         this.selected = selected;
     }
     public Node getRoot(){return root;}
@@ -109,11 +111,11 @@ public class UserInterfacePanel extends javax.swing.JPanel {
         this.revalidate();
     }
 
-//TODO cambiare politica di disegnamento a runtime con qualche pattern?
     /**
-     * Disegna i nodi sul frame. Il metodo in questione disegna le linee che collegano i nodi nella gerarchia.
+     * Disegna i nodi sul frame. Il metodo in questione disegna le linee che collegano i nodi nella gerarchia seguendo la politica
+     * decisa dall'abstract factory <code>DrawerVisitorFactory</code> utilizzato.
      * Il disegno dei nodi stessi è rimandato alla paint della superclasse poichè gli ogetti di classe
-     * GraphicNode sono figli del panel; la politica di disegno è definito nella classe GraphicNode.
+     * GraphicNode sono figli del panel; la loro politica di disegno è definito nella classe GraphicNode.
      * @param g  the <code>Graphics</code> context in which to paint
      */
     @Override
@@ -121,7 +123,7 @@ public class UserInterfacePanel extends javax.swing.JPanel {
         //Disegna i nodi
         super.paint(g);
         Graphics2D g2d = (Graphics2D) g;
-        root.accept(new LineDrawerVisitor(g2d));
+        root.accept(factory.createDrawerVisitor(g2d));
         //disegna i bordi
     }
 

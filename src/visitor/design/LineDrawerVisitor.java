@@ -9,6 +9,9 @@ import java.awt.*;
 import static gui.GraphicNode.VERTICAL_SPACE;
 
 public class LineDrawerVisitor implements NodeVisitor {
+    /**
+     * Visitor che disegna le linee che congiungono i nodi come un vero ogranigramma, vedere la traccia per un esempio.
+     */
     private final Graphics2D g2d;
 
     public LineDrawerVisitor(Graphics2D g2d) {
