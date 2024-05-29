@@ -7,6 +7,8 @@ import gui.UserInterfacePanel;
 import node.CompositeNode;
 import node.Node;
 
+import javax.swing.*;
+
 public class NewNodeCommand implements Command {
     private final UserInterfacePanel panel;
 
@@ -31,6 +33,7 @@ public class NewNodeCommand implements Command {
         gNode.addMouseListener(panel.mouseAdapter);
 
         panel.setModificato(true);
-        panel.ridisegna();
+        panel.repaint();
+        SwingUtilities.invokeLater(panel::revalidate);
     }
 }

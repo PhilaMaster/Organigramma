@@ -65,7 +65,7 @@ public interface Node extends Iterable<Node>{
         Node pNode = getParent();
         while(pNode != null){
             for(Role role : pNode.getRoles())
-                if(role.isExtend())
+                if(role.extend())
                     ret.add(role);
             pNode = pNode.getParent();
         }

@@ -1,10 +1,11 @@
 package gui;
 
 import javax.swing.*;
+import java.awt.event.MouseWheelEvent;
 
 public class CustomScrollPane extends JScrollPane {
     private static final int VERTICAL_SCROLLING_INTENSITY = 8, HORIZONTAL_SCROLLING_INTENSITY=8;
-    private static final boolean HORIZONTAL_SCROLLING = false;
+
     public CustomScrollPane(JComponent component) {
         super(component);
         customizeMouseWheelScrolling();
@@ -12,15 +13,18 @@ public class CustomScrollPane extends JScrollPane {
 
     private void customizeMouseWheelScrolling() {
         this.addMouseWheelListener(e -> {
-            JScrollBar verticalBar = getVerticalScrollBar();
-            int scrollAmount = e.getUnitsToScroll() * verticalBar.getUnitIncrement();
-            verticalBar.setValue(verticalBar.getValue() + scrollAmount*VERTICAL_SCROLLING_INTENSITY);
-            JScrollBar horizontalBar = getHorizontalScrollBar();
-            if(HORIZONTAL_SCROLLING) {
-                scrollAmount = e.getUnitsToScroll() * horizontalBar.getUnitIncrement();
-                horizontalBar.setValue(horizontalBar.getValue() + scrollAmount*HORIZONTAL_SCROLLING_INTENSITY);
+            if (e.isShiftDown() || e.getScrollType() == MouseWheelEvent.WHEEL_UNIT_SCROLL && e.getPreciseWheelRotation() != 0) {
+                JScrollBar horizontalScrollBar = this.getHorizontalScrollBar();
+                JScrollBar verticalScrollBar = this.getVerticalScrollBar();
+
+                //Cliccando lo shift si può spostare la orizzontale
+                if (e.isShiftDown()) {
+                    horizontalScrollBar.setValue(horizontalScrollBar.getValue() + e.getUnitsToScroll()*HORIZONTAL_SCROLLING_INTENSITY);
+                } else {
+                    verticalScrollBar.setValue(verticalScrollBar.getValue() + e.getUnitsToScroll()*VERTICAL_SCROLLING_INTENSITY);
+                }
+                e.consume();
             }
-            else    horizontalBar.setValue(0);
         });
     }
 }

@@ -96,21 +96,6 @@ public class UserInterfacePanel extends javax.swing.JPanel {
     }
 
 
-    public void ridisegna() {
-        PositionerVisitor visitor = new PositionerVisitor();
-        root.accept(visitor);
-        int treeHeight = visitor.getHeight();
-        int treeWidth = visitor.getWidth();
-
-        //verifica possibile aggiunta di scrollbar al panel (se i figli sono troppi e non entrano)
-        setPreferredSize(new Dimension(
-                GraphicNode.HORIZONTAL_OFFSET + GraphicNode.WIDTH*2 + (GraphicNode.WIDTH+ GraphicNode.HORIZONTAL_SPACE)* treeWidth,
-                GraphicNode.VERTICAL_OFFSET + GraphicNode.HEIGHT*2 +(GraphicNode.HEIGHT+ GraphicNode.VERTICAL_SPACE)* treeHeight));
-
-        this.repaint();
-        this.revalidate();
-    }
-
     /**
      * Disegna i nodi sul frame. Il metodo in questione richiama il visitor che disegna le linee che collegano
      * i nodi nella gerarchia seguendo la politica decisa dall'abstract factory <code>DrawerVisitorFactory</code> utilizzato.
@@ -120,11 +105,21 @@ public class UserInterfacePanel extends javax.swing.JPanel {
      */
     @Override
     public void paint(Graphics g) {
+        //Riposiziona i nodi
+        PositionerVisitor visitor = new PositionerVisitor();
+        root.accept(visitor);
+
         //Disegna i nodi
         super.paint(g);
+
+        //Disegna i bordi
         Graphics2D g2d = (Graphics2D) g;
         root.accept(factory.createDrawerVisitor(g2d));
-        //disegna i bordi
+
+        //Verifica eventuale aggiunta di scrollbar al panel (se i figli sono troppi e non entrano)
+        setPreferredSize(new Dimension(
+                GraphicNode.HORIZONTAL_OFFSET + GraphicNode.WIDTH*2 + (GraphicNode.WIDTH+ GraphicNode.HORIZONTAL_SPACE)* visitor.getWidth(),
+                GraphicNode.VERTICAL_OFFSET + GraphicNode.HEIGHT*2 +(GraphicNode.HEIGHT+ GraphicNode.VERTICAL_SPACE)* visitor.getHeight()));
     }
 
     public int getIdAndUpdate() {return idNode++;}

@@ -31,7 +31,8 @@ public class LoadStateCommand extends AbstractStateCommand {
                 panel.setModificato(false);
                 //JOptionPane.showMessageDialog(null, "Organigramma caricato con successo.",
                 //        "Success", JOptionPane.INFORMATION_MESSAGE);
-                panel.ridisegna();
+                panel.repaint();
+                panel.revalidate();
             } catch (IOException | ClassNotFoundException e) {
                 JOptionPane.showMessageDialog(panel, "Impossibile caricare l'organigramma.",
                         "Errore", JOptionPane.ERROR_MESSAGE);

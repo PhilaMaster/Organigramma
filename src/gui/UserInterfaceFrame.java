@@ -7,7 +7,6 @@ import command.state.NewStateCommand;
 import command.state.SaveStateCommand;
 import exceptions.NothingSelectedException;
 import exceptions.RootNotRemovableException;
-import gui.command.CommandJMenuItem;
 import visitor.design.LineDrawerVisitorFactory;
 import visitor.design.NaiveDrawerVisitorFactory;
 
@@ -82,13 +81,13 @@ public class UserInterfaceFrame extends javax.swing.JFrame {
         lineDrawer.setSelected(true);
         lineDrawer.addActionListener(e -> {
             panel.setFactory(LineDrawerVisitorFactory.INSTANCE);
-            panel.ridisegna();
+            panel.repaint();
                 });
         group.add(lineDrawer);
         JRadioButton naiveDrawer = new JRadioButton("Dritte");
         naiveDrawer.addActionListener(e -> {
             panel.setFactory(NaiveDrawerVisitorFactory.INSTANCE);
-            panel.ridisegna();
+            panel.repaint();
                 });
         group.add(naiveDrawer);
 

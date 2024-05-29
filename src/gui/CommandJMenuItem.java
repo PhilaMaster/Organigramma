@@ -1,4 +1,4 @@
-package gui.command;
+package gui;
 
 import command.Command;
 

@@ -156,7 +156,7 @@ class ArrayListTableModel extends AbstractTableModel {
         //Ruoli del nodo stesso
         for(Role role : target.getRoles()) {
             Object[] row = new Object[4];
-            row[0] = role.getRole();
+            row[0] = role.role();
             row[1] = Boolean.FALSE;
             row[2] = "";//non sono ereditati, lascio la casella vuota
             row[3] = "Rimuovi";
@@ -166,9 +166,9 @@ class ArrayListTableModel extends AbstractTableModel {
         Node parent = target.getParent();
         while(parent!=null){
             for(Role role : parent.getRoles())
-                if (role.isExtend()) {
+                if (role.extend()) {
                     Object[] row = new Object[4];
-                    row[0] = role.getRole();
+                    row[0] = role.role();
                     row[1] = Boolean.TRUE;
                     row[2] = parent.getGraphic().getName();
                     row[3] = null;

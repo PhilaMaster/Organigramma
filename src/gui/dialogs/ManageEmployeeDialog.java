@@ -90,7 +90,7 @@ class AddEmployeeDialog extends JDialog {
         allRoles.addAll(target.getRoles());
         JComboBox<String> roleComboBox = new JComboBox<>(allRoles
                 .stream()
-                .map(Role::getRole)
+                .map(Role::role)
                 .toArray(String[]::new));
 
         JButton cancelButton = new JButton("Annulla");
@@ -194,9 +194,9 @@ class EmployeeTableModel extends AbstractTableModel {
     @Override
     public Object getValueAt(int row, int col) {
         return switch (col) {
-            case 0 -> data.get(row).getName();
-            case 1 -> data.get(row).getSurname();
-            case 2 -> data.get(row).getRole();
+            case 0 -> data.get(row).name();
+            case 1 -> data.get(row).surname();
+            case 2 -> data.get(row).role();
             case 3 -> "Rimuovi";
             default -> throw new IndexOutOfBoundsException();
         };
@@ -217,14 +217,8 @@ class EmployeeTableModel extends AbstractTableModel {
         return col == 3;  // Solo la colonna del bottone è editabile
     }
 
-    @Override
-    public void setValueAt(Object value, int row, int col) {
-//        data.get(row)[col] = value;
-//        fireTableCellUpdated(row, col);
-//        throw new UnsupportedOperationException("Employee not mutable.");
-    }
+    //metodo setValueAt rimosso poichè l'employee è immutabile
     public void addRow(Employee e) {
-        //data.add(new Employee((String) rowData[0],(String) rowData[1],(Role) rowData[2]));
         data.add(e);
         fireTableRowsInserted(data.size() - 1, data.size() - 1);
     }

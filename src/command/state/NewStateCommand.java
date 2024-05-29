@@ -16,6 +16,6 @@ public class NewStateCommand extends AbstractStateCommand{
 
         panel.setRoot(new CompositeNode(0,new GraphicNode("Nuovo organigramma")));
         panel.resetId();
-        panel.ridisegna();
+        panel.repaint();
     }
 }

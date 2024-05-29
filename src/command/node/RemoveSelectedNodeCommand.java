@@ -35,6 +35,7 @@ public class RemoveSelectedNodeCommand implements Command {
         selected.getParent().remove(selected);
         panel.setSelected(null);
         panel.setModificato(true);
-        panel.ridisegna();
+        panel.repaint();
+        panel.revalidate();
     }
 }
