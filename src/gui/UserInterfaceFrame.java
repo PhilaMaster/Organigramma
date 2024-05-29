@@ -65,6 +65,7 @@ public class UserInterfaceFrame extends javax.swing.JFrame {
             }
         });
 
+        //noinspection ExtractMethodRecommender
         JButton removeNodeButton = new JButton("Rimuovi");
         removeNodeButton.addActionListener(evt -> {
             try {

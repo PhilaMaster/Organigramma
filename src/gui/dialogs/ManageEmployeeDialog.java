@@ -230,7 +230,7 @@ class EmployeeTableModel extends AbstractTableModel {
     }
     public void removeRow(int row){
         data.remove(row);
-        fireTableRowsDeleted(row, row);//TODO row row?
+        fireTableRowsDeleted(row, row);
     }
     public Employee getRowData(int row) {
         return data.get(row);

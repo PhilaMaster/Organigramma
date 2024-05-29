@@ -103,7 +103,7 @@ public class UserInterfacePanel extends javax.swing.JPanel {
         int treeWidth = visitor.getWidth();
 
         //verifica possibile aggiunta di scrollbar al panel (se i figli sono troppi e non entrano)
-        setPreferredSize(new Dimension(//TODO formula un attimo da rivedere
+        setPreferredSize(new Dimension(
                 GraphicNode.HORIZONTAL_OFFSET + GraphicNode.WIDTH*2 + (GraphicNode.WIDTH+ GraphicNode.HORIZONTAL_SPACE)* treeWidth,
                 GraphicNode.VERTICAL_OFFSET + GraphicNode.HEIGHT*2 +(GraphicNode.HEIGHT+ GraphicNode.VERTICAL_SPACE)* treeHeight));
 
@@ -112,8 +112,8 @@ public class UserInterfacePanel extends javax.swing.JPanel {
     }
 
     /**
-     * Disegna i nodi sul frame. Il metodo in questione disegna le linee che collegano i nodi nella gerarchia seguendo la politica
-     * decisa dall'abstract factory <code>DrawerVisitorFactory</code> utilizzato.
+     * Disegna i nodi sul frame. Il metodo in questione richiama il visitor che disegna le linee che collegano
+     * i nodi nella gerarchia seguendo la politica decisa dall'abstract factory <code>DrawerVisitorFactory</code> utilizzato.
      * Il disegno dei nodi stessi è rimandato alla paint della superclasse poichè gli ogetti di classe
      * GraphicNode sono figli del panel; la loro politica di disegno è definito nella classe GraphicNode.
      * @param g  the <code>Graphics</code> context in which to paint
@@ -127,12 +127,8 @@ public class UserInterfacePanel extends javax.swing.JPanel {
         //disegna i bordi
     }
 
-    @Override
-    public void removeAll(){
-        super.removeAll();
-    }
-
     public int getIdAndUpdate() {return idNode++;}
+    public void resetId(){idNode=1;}
 
     public boolean getModificato(){return modificato;}
     public void setModificato(boolean mod){modificato = mod;}

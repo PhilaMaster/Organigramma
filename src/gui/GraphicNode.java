@@ -38,6 +38,7 @@ public class GraphicNode extends JComponent {
             g2d.setColor(Color.white);
         else
             g2d.setColor(new Color(18, 188, 255));
+        //noinspection SuspiciousNameCombination
         g2d.fillRect(BORDER_WIDTH, BORDER_WIDTH, WIDTH-BORDER_WIDTH*2, HEIGHT-BORDER_WIDTH*2);
 
         //ridimensiono scritta in modo che entri all'interno del rettangolo
