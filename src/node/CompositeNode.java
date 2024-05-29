@@ -58,13 +58,13 @@ public class CompositeNode implements Node, Serializable {
     }
 
     @Override
-    public boolean add(Node node) {
-        return children.add(node);
+    public void add(Node node) {
+        children.add(node);
     }
 
     @Override
-    public boolean remove(Node node) {
-        return children.remove(node);
+    public void remove(Node node) {
+        children.remove(node);
     }
 
     @Override

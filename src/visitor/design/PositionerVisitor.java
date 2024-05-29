@@ -20,20 +20,22 @@ public class PositionerVisitor implements NodeVisitor {
         for(Node n : node.getChildren())
             n.accept(this);
 
-        //CALCOLO ALTEZZA E SPESSORE
+        //Calcolo altezza e spessore
         if(node.isLeaf()) width++;
         height = Math.max(node.getHeight(), height);
 
-        //CALCOLO POSIZIONE
+        //Calcolo posizione
         if (node.isLeaf()){
             node.getGraphic().setLocation(xLeaf,getY(node));
             xLeaf += WIDTH + HORIZONTAL_SPACE;//posizione prossimo nodo foglia
         }else
+            //se nodo non foglia
             if(node.getChildrenCount()==1){
                 //se ha un figlio imposto la sua stessa posizione
                 int xParent = node.getChild(0).getGraphic().getX();
                 node.getGraphic().setLocation(xParent,getY(node));
             }else
+                //altrimenti faccio la media delle x tra primo e ultimo figlio
                 node.getGraphic().setLocation(getXParent(node),getY(node));
     }
 

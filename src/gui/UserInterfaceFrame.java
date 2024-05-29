@@ -97,9 +97,7 @@ public class UserInterfaceFrame extends javax.swing.JFrame {
         });
         JMenuItem item3 = new CommandJMenuItem("Salva", new SaveStateCommand(panel));
         JMenuItem item4 = new JMenuItem("Chiudi");
-        item4.addActionListener(e -> {
-            salvaSeModificatoAnnulla();
-        });
+        item4.addActionListener(e -> salvaSeModificatoAnnulla());
         menu.add(item1);
         menu.add(item2);
         menu.add(item3);

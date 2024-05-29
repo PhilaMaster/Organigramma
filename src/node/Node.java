@@ -10,29 +10,42 @@ import java.util.List;
 
 public interface Node extends Iterable<Node>{
     /**
-     *
      * @param node il nodo da aggiungere
-     * @return true se il nodo è stato aggiunto correttamente, false altrimenti
      */
-    boolean add(Node node);
+    void add(Node node);
 
     /**
-     *
      * @param node il nodo da rimuovere
-     * @return true se il nodo è stato rimosso correttamente, false altrimenti
      */
-    boolean remove(Node node);
+    void remove(Node node);
 
+    /**
+     * Restituisce il <code>Node</code> figlio in posizione i
+     * @param i, l'indice del nodo
+     * @return il nodo
+     */
     Node getChild(int i);
 
+    /**
+     * @return true se e solo se il nodo è foglia
+     */
     boolean isLeaf();
+
+    /**
+     * @return true se e solo se il nodo è radice
+     */
     boolean isRoot();
 
+    /**
+     * @return l'altezza del nodo
+     */
     int getHeight();
 
+    /**
+     * @return la lista di <code>Node</code> figli
+     */
     List<Node> getChildren();
 
-    //boolean getRemovable();
 
     void accept(NodeVisitor visitor);
 

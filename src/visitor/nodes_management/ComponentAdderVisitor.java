@@ -6,7 +6,9 @@ import node.Node;
 import visitor.NodeVisitor;
 
 public class ComponentAdderVisitor implements NodeVisitor {
-
+    /**
+     * Visitor che aggiunge all'<code>UserInterfaceFrame</code> passato nel costruttore tutti i figli del nodo su cui si invoca l'accept().
+     */
     private final UserInterfacePanel panel;
     public ComponentAdderVisitor(UserInterfacePanel panel) {
         this.panel = panel;
