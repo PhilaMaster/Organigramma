@@ -9,13 +9,12 @@ import java.util.*;
 
 public class CompositeNode implements Node, Serializable {
     @Serial
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
 
     private final List<Role> roles = new ArrayList<>();
     private final List<Employee> employees = new ArrayList<>();
     private final List<Node> children = new ArrayList<>();
     private final int altezza;
-    //private String nome;
     private boolean removable = true;
     private Node parent;
     private final GraphicNode graphicNode;

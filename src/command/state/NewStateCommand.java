@@ -12,10 +12,12 @@ public class NewStateCommand extends AbstractStateCommand{
 
     @Override
     public void execute() {
+        //reinizializzo lo stato del panel
         new ClearStateCommand(panel).execute();
 
+        //imposto una nuova radice e aggiorno il disegno
         panel.setRoot(new CompositeNode(0,new GraphicNode("Nuovo organigramma")));
-        panel.resetId();
         panel.repaint();
+        panel.revalidate();
     }
 }

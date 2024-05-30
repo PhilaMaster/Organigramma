@@ -11,8 +11,8 @@ public class PositionerVisitor implements NodeVisitor {
      * Calcola inoltre altezza e larghezza dell'albero, possono essere acceduti con i metodi getters.
      */
 
-    int height,width;
-    int xLeaf = HORIZONTAL_OFFSET;
+    private int height,width;
+    private int xLeaf = HORIZONTAL_OFFSET;
 
     @Override
     public void visit(Node node) {

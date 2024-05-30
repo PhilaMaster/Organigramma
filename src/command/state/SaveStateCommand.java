@@ -16,13 +16,13 @@ public class SaveStateCommand extends AbstractStateCommand {
 
     @Override
     public void execute() {
-        // Apri un file chooser per selezionare il file di salvataggio
+        //apre dialog di scelta file
         JFileChooser fileChooser = new JFileChooser();
         int option = fileChooser.showSaveDialog(null);
         if (option == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
             try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file))) {
-                // Salva lo stato dell'applicazione
+                //salva su file
                 out.writeObject(panel.getRoot());
                 JOptionPane.showMessageDialog(panel, "Organigramma salvato con successo.",
                         "Success", JOptionPane.INFORMATION_MESSAGE);

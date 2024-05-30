@@ -40,15 +40,22 @@ public interface Node extends Iterable<Node>{
     int getHeight();
 
     /**
-     * @return la lista di <code>Node</code> figli
+     * @return la lista dei <code>Node</code> figli
      */
     List<Node> getChildren();
 
 
     void accept(NodeVisitor visitor);
 
+    /**
+     * @return l'oggetto grafico relativo al nodo
+     */
     GraphicNode getGraphic();
 
+    /**
+     * Restituisce il padre del nodo
+     * @return il padre se il nodo non è radice, null altrimenti
+     */
     Node getParent();
     void setParent(Node parent);
 
@@ -58,8 +65,19 @@ public interface Node extends Iterable<Node>{
 
     void setRemovable(boolean removable);
 
+    /**
+     * @return la lista degli impiegati associati al nodo
+     */
     List<Employee> getEmployees();
+
+    /**
+     * @return la lista dei ruoli registrati nel nodo
+     */
     List<Role> getRoles();
+
+    /**
+     * @return la lista dei ruoli che vengono ereditati dalla gerarchia
+     */
     default List<Role> getInheritedRoles(){
         List<Role> ret = new ArrayList<>();
         Node pNode = getParent();
