@@ -1,6 +1,6 @@
 package visitor.design;
 
-import gui.GraphicNode;
+import node.GraphicNode;
 import node.Node;
 import visitor.NodeVisitor;
 

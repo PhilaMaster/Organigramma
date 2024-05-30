@@ -1,4 +1,4 @@
-package gui;
+package node;
 
 import javax.swing.*;
 import java.awt.*;

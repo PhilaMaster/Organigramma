@@ -1,12 +1,12 @@
 package visitor.design;
 
-import gui.GraphicNode;
+import node.GraphicNode;
 import node.Node;
 import visitor.NodeVisitor;
 
 import java.awt.*;
 
-import static gui.GraphicNode.VERTICAL_SPACE;
+import static node.GraphicNode.VERTICAL_SPACE;
 
 public class LineDrawerVisitor implements NodeVisitor {
     /**

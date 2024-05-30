@@ -1,6 +1,6 @@
 package command.state;
 
-import gui.GraphicNode;
+import node.GraphicNode;
 import gui.UserInterfacePanel;
 import node.CompositeNode;
 

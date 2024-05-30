@@ -7,6 +7,7 @@ import command.state.NewStateCommand;
 import command.state.SaveStateCommand;
 import exceptions.NothingSelectedException;
 import exceptions.RootNotRemovableException;
+import node.GraphicNode;
 import visitor.design.LineDrawerVisitorFactory;
 import visitor.design.NaiveDrawerVisitorFactory;
 

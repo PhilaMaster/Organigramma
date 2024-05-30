@@ -3,6 +3,7 @@ package gui;
 import command.node.NewNodeCommand;
 import command.node.RenameNodeCommand;
 import node.CompositeNode;
+import node.GraphicNode;
 import node.Node;
 import visitor.design.*;
 import visitor.nodes_management.ComponentAdderVisitor;

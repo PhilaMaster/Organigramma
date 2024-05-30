@@ -1,6 +1,6 @@
 package gui.dialogs;
 
-import gui.GraphicNode;
+import node.GraphicNode;
 import gui.UserInterfacePanel;
 import node.CompositeNode;
 import node.Node;

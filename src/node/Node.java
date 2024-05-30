@@ -1,6 +1,5 @@
 package node;
 
-import gui.GraphicNode;
 import visitor.NodeVisitor;
 
 import java.util.ArrayList;

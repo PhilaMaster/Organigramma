@@ -2,7 +2,7 @@ package command.node;
 
 import command.Command;
 import exceptions.NothingSelectedException;
-import gui.GraphicNode;
+import node.GraphicNode;
 import gui.UserInterfacePanel;
 import node.Node;
 

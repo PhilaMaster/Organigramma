@@ -1,6 +1,6 @@
 package visitor.nodes_management;
 
-import gui.GraphicNode;
+import node.GraphicNode;
 import node.Node;
 import visitor.NodeVisitor;
 
