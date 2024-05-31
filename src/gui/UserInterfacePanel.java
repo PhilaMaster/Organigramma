@@ -7,7 +7,7 @@ import node.GraphicNode;
 import node.Node;
 import visitor.design.*;
 import visitor.nodes_management.ComponentAdderVisitor;
-import visitor.nodes_management.SelectedVisitor;
+import visitor.nodes_management.SelectorVisitor;
 
 import javax.swing.*;
 import java.awt.*;
@@ -31,9 +31,9 @@ public class UserInterfacePanel extends javax.swing.JPanel {
         }
 
         private void setSelected(GraphicNode g) {
-            SelectedVisitor selectedVisitor = new SelectedVisitor(g);
-            root.accept(selectedVisitor);
-            selected = selectedVisitor.getSelectedNode();
+            SelectorVisitor selectorVisitor = new SelectorVisitor(g);
+            root.accept(selectorVisitor);
+            selected = selectorVisitor.getSelectedNode();
         }
 
 

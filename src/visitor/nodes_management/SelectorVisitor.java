@@ -4,7 +4,7 @@ import node.GraphicNode;
 import node.Node;
 import visitor.NodeVisitor;
 
-public class SelectedVisitor implements NodeVisitor {
+public class SelectorVisitor implements NodeVisitor {
     /**
      * Visitor che ha il compito di fare una visita dell'albero e settare a true il booleano Selected relativo
      * al Node selezionato col tasto sinistro, false a tutti gli altri.
@@ -12,7 +12,7 @@ public class SelectedVisitor implements NodeVisitor {
     private Node selectedNode;
     private final GraphicNode selectedGraphicNode;
 
-    public SelectedVisitor(GraphicNode selectedGraphicNode) {
+    public SelectorVisitor(GraphicNode selectedGraphicNode) {
         this.selectedGraphicNode = selectedGraphicNode;
     }
 

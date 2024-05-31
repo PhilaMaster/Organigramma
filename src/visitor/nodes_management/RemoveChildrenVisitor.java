@@ -16,9 +16,8 @@ public class RemoveChildrenVisitor implements NodeVisitor {
 
     @Override
     public void visit(Node node) {
-        for(Node child : node.getChildren()) {
+        for(Node child : node.getChildren())
             child.accept(this);
-            panel.remove(child.getGraphic());
-        }
+        panel.remove(node.getGraphic());
     }
 }

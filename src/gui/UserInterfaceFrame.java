@@ -16,6 +16,7 @@ import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+@SuppressWarnings("DuplicatedCode")
 public class UserInterfaceFrame extends javax.swing.JFrame {
 
     public static final int WIDTH = 1280, HEIGHT = 720;

@@ -3,6 +3,8 @@ package gui;
 import command.node.NewNodeCommand;
 import command.node.RemoveSelectedNodeCommand;
 import command.node.RenameNodeCommand;
+import exceptions.NothingSelectedException;
+import exceptions.RootNotRemovableException;
 import gui.dialogs.ManageEmployeeDialog;
 import gui.dialogs.ManageRolesDialog;
 
@@ -16,9 +18,23 @@ public class NodeJPopupMenu extends JPopupMenu {
     }
 
     private void itemsSetUp() {
-        JMenuItem item;
         add(new CommandJMenuItem("Aggiungi figlio",new NewNodeCommand(panel)));
-        add(new CommandJMenuItem("Rimuovi nodo",new RemoveSelectedNodeCommand(panel)));
+        JMenuItem item = new JMenuItem("Rimuovi nodo");
+        item.addActionListener(e1 -> {
+            try {
+                new RemoveSelectedNodeCommand(panel).execute();
+            } catch (
+                    NothingSelectedException e) {
+                JOptionPane.showMessageDialog(this, "Selezionare un nodo da rimuovere", "Errore", JOptionPane.ERROR_MESSAGE);
+            } catch (
+                    RootNotRemovableException e) {
+                JOptionPane.showMessageDialog(this, "Impossibile rimuovere il nodo radice", "Errore", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+        add(item);
+
+
+
         add(new CommandJMenuItem("Rinomina nodo",new RenameNodeCommand(panel.getSelected())));
 
         addSeparator();
