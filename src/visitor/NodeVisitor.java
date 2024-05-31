@@ -1,7 +1,7 @@
 package visitor;
 
-import node.Node;
+import node.CompositeNode;
 
 public interface NodeVisitor {
-    void visit(Node node);
+    void visit(CompositeNode node);
 }

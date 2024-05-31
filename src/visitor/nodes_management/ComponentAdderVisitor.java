@@ -1,5 +1,6 @@
 package visitor.nodes_management;
 
+import node.CompositeNode;
 import node.GraphicNode;
 import gui.UserInterfacePanel;
 import node.Node;
@@ -14,7 +15,8 @@ public class ComponentAdderVisitor implements NodeVisitor {
         this.panel = panel;
     }
 
-    public void visit(Node node) {
+    @Override
+    public void visit(CompositeNode node) {
         for(Node child : node.getChildren()) {
             child.accept(this);
         }

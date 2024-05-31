@@ -2,6 +2,7 @@ package visitor.design;
 
 import static node.GraphicNode.*;
 
+import node.CompositeNode;
 import node.Node;
 import visitor.NodeVisitor;
 
@@ -15,7 +16,7 @@ public class PositionerVisitor implements NodeVisitor {
     private int xLeaf = HORIZONTAL_OFFSET;
 
     @Override
-    public void visit(Node node) {
+    public void visit(CompositeNode node) {
         //POST-ORDER DEPTH FIRST TRAVERSAL
         for(Node n : node.getChildren())
             n.accept(this);

@@ -1,5 +1,6 @@
 package visitor.nodes_management;
 
+import node.CompositeNode;
 import node.GraphicNode;
 import node.Node;
 import visitor.NodeVisitor;
@@ -16,7 +17,8 @@ public class SelectorVisitor implements NodeVisitor {
         this.selectedGraphicNode = selectedGraphicNode;
     }
 
-    public void visit(Node node){
+    @Override
+    public void visit(CompositeNode node){
         for(Node child : node.getChildren()){
             child.accept(this);
         }

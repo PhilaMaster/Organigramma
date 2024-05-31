@@ -1,5 +1,6 @@
 package visitor.design;
 
+import node.CompositeNode;
 import node.GraphicNode;
 import node.Node;
 import visitor.NodeVisitor;
@@ -19,7 +20,7 @@ public class LineDrawerVisitor implements NodeVisitor {
     }
 
     @Override
-    public void visit(Node n) {
+    public void visit(CompositeNode n) {
         for(Node child : n.getChildren()) {child.accept(this);}
 
         int xMean = n.getGraphic().getX() + GraphicNode.WIDTH / 2;

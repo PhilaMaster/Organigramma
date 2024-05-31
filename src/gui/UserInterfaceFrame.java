@@ -58,13 +58,7 @@ public class UserInterfaceFrame extends javax.swing.JFrame {
 
 
         JButton addChildButton = new JButton("Aggiungi Figlio");
-        addChildButton.addActionListener(evt -> {
-            try {
-                new NewNodeCommand(panel).execute();
-            } catch (NothingSelectedException e) {
-                JOptionPane.showMessageDialog(this, "Selezionare un nodo a cui aggiungere un figlio.", "Errore", JOptionPane.ERROR_MESSAGE);
-            }
-        });
+        addChildButton.addActionListener(evt -> new NewNodeCommand(panel).execute());
 
         //noinspection ExtractMethodRecommender
         JButton removeNodeButton = new JButton("Rimuovi");
@@ -127,14 +121,7 @@ public class UserInterfaceFrame extends javax.swing.JFrame {
         menuBar.add(menu);
 
         menu = new JMenu("Nodo");
-        item1 = new JMenuItem("Aggiungi figlio");
-        item1.addActionListener(e -> {
-            try {
-                new NewNodeCommand(panel).execute();
-            } catch (NothingSelectedException ex) {
-                JOptionPane.showMessageDialog(this, "Selezionare un nodo a cui aggiungere un figlio.", "Errore", JOptionPane.ERROR_MESSAGE);
-            }
-        });
+        item1 = new CommandJMenuItem("Aggiungi figlio",new NewNodeCommand(panel));
         item2 = new JMenuItem("Rimuovi nodo");
         item2.addActionListener(e -> {
             try {

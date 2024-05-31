@@ -1,5 +1,6 @@
 package visitor.design;
 
+import node.CompositeNode;
 import node.GraphicNode;
 import node.Node;
 import visitor.NodeVisitor;
@@ -17,7 +18,7 @@ public class NaiveDrawerVisitor implements NodeVisitor {
         this.g2d = g2d;
     }
     @Override
-    public void visit(Node n) {
+    public void visit(CompositeNode n) {
         for(Node child : n.getChildren()) {child.accept(this);}
 
         //Se non è il nodo radice, disegna la linea che lo congiunge il padre

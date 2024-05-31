@@ -1,5 +1,6 @@
 package visitor.nodes_management;
 
+import node.CompositeNode;
 import node.Node;
 import visitor.NodeVisitor;
 
@@ -15,7 +16,7 @@ public class RemoveChildrenVisitor implements NodeVisitor {
     }
 
     @Override
-    public void visit(Node node) {
+    public void visit(CompositeNode node) {
         for(Node child : node.getChildren())
             child.accept(this);
         panel.remove(node.getGraphic());
