@@ -66,20 +66,18 @@ class AddRolesDialog extends JDialog {
 
     public AddRolesDialog(final Frame parent, final Node target, final ArrayListTableModel tableModel) {
         super(parent, "Gestisci ruoli", true);
-        // Crea gli elementi del form
         JTextField roleNameField = new JTextField(20);
         JCheckBox inheritCheckBox = new JCheckBox();
 
         JButton cancelButton = new JButton("Annulla");
         JButton confirmButton = new JButton("Conferma");
 
-        // Imposta il layout
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.anchor = GridBagConstraints.WEST;
 
-        // Aggiungi gli elementi al dialogo
+
         gbc.gridx = 0;
         gbc.gridy = 0;
         add(new JLabel("Nome del Ruolo:"), gbc);
@@ -102,7 +100,7 @@ class AddRolesDialog extends JDialog {
         add(inheritCheckBox, gbc);
 
 
-        // Aggiungi i bottoni
+        //aggiungi i bottoni
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(confirmButton);
         buttonPanel.add(cancelButton);
@@ -113,7 +111,7 @@ class AddRolesDialog extends JDialog {
         gbc.anchor = GridBagConstraints.CENTER;
         add(buttonPanel, gbc);
 
-        // Listener per i bottoni
+        //listener per i bottoni
         cancelButton.addActionListener(e -> dispose());
 
         confirmButton.addActionListener(e -> {
@@ -121,9 +119,6 @@ class AddRolesDialog extends JDialog {
             boolean inheritRole = inheritCheckBox.isSelected();
 
             if(!roleName.isBlank()) {
-                // Logica per gestire i dati del nuovo ruolo
-                System.out.println("Nome del Ruolo: " + roleName);
-                System.out.println("Eredita ai figli: " + inheritRole);
                 Object[] row = new Object[5];
                 row[0] = roleName;
                 row[1] = inheritRole;
@@ -140,7 +135,6 @@ class AddRolesDialog extends JDialog {
             dispose();
         });
 
-        // Imposta il pulsante di conferma come pulsante predefinito
         getRootPane().setDefaultButton(confirmButton);
 
         pack();

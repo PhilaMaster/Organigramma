@@ -24,7 +24,6 @@ public class UserInterfaceFrame extends javax.swing.JFrame {
     public UserInterfaceFrame() {
         panel = panelSetup();
         setUp();
-        System.out.println("UserInterfaceFrame created");
     }
 
     private void setUp() {
@@ -209,11 +208,9 @@ public class UserInterfaceFrame extends javax.swing.JFrame {
             if (option == JOptionPane.YES_OPTION) {
                 //salvo e chiudo
                 new SaveStateCommand(panel).execute();
-                System.out.println("Salvato");
                 System.exit(0);
             } else if (option == JOptionPane.NO_OPTION) {
                 //chiudo senza salvare
-                System.out.println("Non salvato");
                 System.exit(0);
             } else if (option == JOptionPane.CANCEL_OPTION) {
                 //annullo chiusura

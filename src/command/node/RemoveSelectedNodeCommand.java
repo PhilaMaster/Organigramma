@@ -22,7 +22,7 @@ public class RemoveSelectedNodeCommand implements Command {
         if (selected.isRoot()) throw new RootNotRemovableException();
 
         if (selected.getChildrenCount()>0){
-            Object[] options = { "OK", "CANCEL" };
+            Object[] options = { "OK", "ANNULLA" };
             int risposta = JOptionPane.showOptionDialog(null,
                     "Attenzione, il nodo selezionato ha dei figli, continuare con la rimozione?", "Rimozione nodo",
                     JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE,
