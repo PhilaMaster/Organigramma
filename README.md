@@ -1,4 +1,6 @@
 Progetto di ingegneria del software 23/24.
+Per eseguire il programma basta eseguire il file "Applicazione" situato in /src/
+
 Organigramma Aziendale
 
 Si vuole sviluppare un’applicazione per la gestione di un organigramma aziendale (https://it.wikipedia.org/wiki/Organigramma). L’applicazione deve consentire di aggiornare dinamicamente la struttura di una determinata organizzazione. In particolare, è possibile definire le tipologie di unità (ad es. dipartimenti), sottounità organizzative (ad es. gruppi di lavoro) e/o di organi di gestione organizzati gerarchicamente. 
